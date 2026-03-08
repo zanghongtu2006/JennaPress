@@ -1,0 +1,17 @@
+{
+  "name": "corporate-basic",
+  "version": "0.0.3",
+  "label": "Corporate Basic",
+  "description": "A minimal corporate website template using block-driven page content.",
+  "supportedPageTypes": [
+    "page"
+  ],
+  "supportedBlocks": [
+    "hero",
+    "feature-grid",
+    "rich-text",
+    "cta-banner",
+    "stats",
+    "contact"
+  ]
+}

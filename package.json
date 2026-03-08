@@ -1,0 +1,22 @@
+{
+  "name": "nuxt-sitekit",
+  "version": "0.0.15",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0",
+    "nuxt": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^25.3.5",
+    "typescript": "^5.8.2"
+  }
+}
