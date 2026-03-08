@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import type { SiteConfig } from '~/types'
 import CorporateBasicFrame from '~/templates/corporate-basic/Frame.vue'
 import SaasLandingFrame from '~/templates/saas-landing/Frame.vue'
-import SkkCorporateFrame from '~/templates/skk-corporate/Frame.vue'
 
 const props = defineProps<{
   template: string
@@ -12,8 +11,7 @@ const props = defineProps<{
 
 const frameMap = {
   'corporate-basic': CorporateBasicFrame,
-  'saas-landing': SaasLandingFrame,
-  'skk-corporate': SkkCorporateFrame
+  'saas-landing': SaasLandingFrame
 } as const
 
 const activeFrame = computed(() => {

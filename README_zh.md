@@ -106,14 +106,11 @@ templates/
         ...
   saas-landing/
     ...
-  skk-corporate/
-    ...
 
 public/
   template-assets/
     corporate-basic/
     saas-landing/
-    skk-corporate/
 ```
 
 ---

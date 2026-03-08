@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import type { PageContent } from '~/types'
 import TemplateCorporateBasic from '~/templates/corporate-basic/Template.vue'
 import TemplateSaasLanding from '~/templates/saas-landing/Template.vue'
-import TemplateSkkCorporate from '~/templates/skk-corporate/Template.vue'
 
 const props = defineProps<{
   template: string
@@ -12,8 +11,7 @@ const props = defineProps<{
 
 const templateMap = {
   'corporate-basic': TemplateCorporateBasic,
-  'saas-landing': TemplateSaasLanding,
-  'skk-corporate': TemplateSkkCorporate
+  'saas-landing': TemplateSaasLanding
 } as const
 
 const activeTemplate = computed(() => {

@@ -32,11 +32,6 @@ const blogMap = {
     home: SaasLandingBlogHome,
     category: SaasLandingBlogCategory,
     post: SaasLandingBlogPost
-  },
-  'skk-corporate': {
-    home: SkkCorporateBlogHome,
-    category: SkkCorporateBlogCategory,
-    post: SkkCorporateBlogPost
   }
 } as const
 
