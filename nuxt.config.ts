@@ -68,8 +68,10 @@ export default defineNuxtConfig({
       ]
     }
   },
+  ssr: true,
   nitro: {
     prerender: {
+      autoSubfolderIndex: true,
       routes: [...readPageRoutes(), ...readBlogRoutes()]
     }
   },
