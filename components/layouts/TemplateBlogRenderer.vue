@@ -7,9 +7,6 @@ import CorporateBasicBlogPost from '~/templates/corporate-basic/blog/BlogPost.vu
 import SaasLandingBlogHome from '~/templates/saas-landing/blog/BlogHome.vue'
 import SaasLandingBlogCategory from '~/templates/saas-landing/blog/BlogCategory.vue'
 import SaasLandingBlogPost from '~/templates/saas-landing/blog/BlogPost.vue'
-import SkkCorporateBlogHome from '~/templates/skk-corporate/blog/BlogHome.vue'
-import SkkCorporateBlogCategory from '~/templates/skk-corporate/blog/BlogCategory.vue'
-import SkkCorporateBlogPost from '~/templates/skk-corporate/blog/BlogPost.vue'
 
 const props = defineProps<{
   template: string
