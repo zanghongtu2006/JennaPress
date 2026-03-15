@@ -231,9 +231,12 @@ export default defineNuxtConfig({
     if (!savedLanguage) return
 
     var path = window.location.pathname
-    if (!path.startsWith(baseURL)) return
+    var normalizedBaseURL = baseURL.endsWith('/') ? baseURL : baseURL + '/'
+    var normalizedBaseRoot = normalizedBaseURL.replace(/\/$/, '')
+    if (!(path === normalizedBaseRoot || path.startsWith(normalizedBaseURL))) return
 
-    var relativePath = '/' + path.slice(baseURL.length).replace(/^\/+/, '')
+    var slicedPath = path === normalizedBaseRoot ? '' : path.slice(normalizedBaseURL.length)
+    var relativePath = '/' + slicedPath.replace(/^\/+/, '')
     if (relativePath === '//') relativePath = '/'
 
     var parts = relativePath.split('/').filter(Boolean)
