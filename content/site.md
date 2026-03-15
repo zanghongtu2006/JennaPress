@@ -1,8 +1,8 @@
 ---
 name: Jenna Press
 logoText: JP
-defaultTemplate: saas-landing
-defaultTheme: light
+defaultTemplate: corporate-basic
+defaultTheme: dark
 themes:
   - dark
   - pink
