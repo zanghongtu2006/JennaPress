@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SiteConfig } from '~/types'
+import ThemeSelect from '~/templates/saas-landing/components/ThemeSelect.vue'
 
 defineProps<{ site: SiteConfig }>()
 </script>
@@ -12,11 +13,15 @@ defineProps<{ site: SiteConfig }>()
         <span>{{ site.name }}</span>
       </NuxtLink>
 
-      <nav class="template-saas-nav" aria-label="Primary">
-        <NuxtLink v-for="item in site.nav" :key="item.to" :to="item.to">
-          {{ item.label }}
-        </NuxtLink>
-      </nav>
+      <div class="template-saas-header-actions">
+        <nav class="template-saas-nav" aria-label="Primary">
+          <NuxtLink v-for="item in site.nav" :key="item.to" :to="item.to">
+            {{ item.label }}
+          </NuxtLink>
+        </nav>
+
+        <ThemeSelect :themes="site.themes" :default-theme="site.defaultTheme" />
+      </div>
     </div>
   </header>
 </template>

@@ -2,6 +2,11 @@
 name: Jenna Press
 logoText: JP
 defaultTemplate: saas-landing
+defaultTheme: light
+themes:
+  - light
+  - dark
+  - pink
 tagline: Build fast and ship globally.
 nav:
   - label: Home

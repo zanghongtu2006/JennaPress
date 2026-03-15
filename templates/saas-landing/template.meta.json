@@ -1,8 +1,22 @@
 {
   "name": "saas-landing",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "label": "SaaS Landing",
   "description": "A high-contrast technology template with dark neon surfaces, stronger hero treatment, and the same block-driven page schema.",
-  "supportedPageTypes": ["page"],
-  "supportedBlocks": ["hero", "feature-grid", "rich-text", "cta-banner", "stats", "contact"]
+  "supportedPageTypes": [
+    "page"
+  ],
+  "supportedBlocks": [
+    "hero",
+    "feature-grid",
+    "rich-text",
+    "cta-banner",
+    "stats",
+    "contact"
+  ],
+  "themes": [
+    "light",
+    "dark",
+    "pink"
+  ]
 }

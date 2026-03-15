@@ -14,6 +14,19 @@ function ensureArray(value: unknown, field: string): unknown[] {
   return value
 }
 
+function ensureOptionalString(value: unknown, field: string) {
+  if (value !== undefined && typeof value !== 'string') {
+    throw new Error(`Invalid field: ${field}`)
+  }
+}
+
+function ensureOptionalStringArray(value: unknown, field: string) {
+  if (value !== undefined) {
+    const list = ensureArray(value, field)
+    list.forEach((item, index) => ensureString(item, `${field}[${index}]`))
+  }
+}
+
 function ensureFieldAbsent(value: unknown, field: string) {
   if (value !== undefined) {
     throw new Error(`Field is not allowed: ${field}`)
@@ -73,6 +86,8 @@ export function validateSiteConfig(input: any): SiteConfig {
   ensureString(input?.name, 'site.name')
   ensureString(input?.logoText, 'site.logoText')
   ensureString(input?.defaultTemplate, 'site.defaultTemplate')
+  ensureOptionalString(input?.defaultTheme, 'site.defaultTheme')
+  ensureOptionalStringArray(input?.themes, 'site.themes')
   ensureArray(input?.nav, 'site.nav')
   return input as SiteConfig
 }

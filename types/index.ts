@@ -62,6 +62,8 @@ export type SiteConfig = {
   name: string
   logoText: string
   defaultTemplate: string
+  defaultTheme?: string
+  themes?: string[]
   tagline?: string
   nav: NavItem[]
   footerText: string
