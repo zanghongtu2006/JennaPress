@@ -8,6 +8,11 @@ const { theme, themes, setTheme } = useTheme({
   themes: props.themes,
   defaultTheme: props.defaultTheme
 })
+
+const selectedTheme = computed({
+  get: () => theme.value,
+  set: (value: string) => setTheme(value)
+})
 </script>
 
 <template>
@@ -15,14 +20,13 @@ const { theme, themes, setTheme } = useTheme({
     <div class="theme-select-wrap">
       <select
         id="saas-theme-select"
+        v-model="selectedTheme"
         class="theme-select-control"
-        :value="theme"
-        @change="setTheme(($event.target as HTMLSelectElement).value)"
       >
         <option v-for="item in themes" :key="item" :value="item">
           {{ item }}
         </option>
       </select>
-    </div>  
+    </div>
   </div>
 </template>
