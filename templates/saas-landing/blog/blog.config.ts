@@ -7,14 +7,14 @@ export default {
   home: BlogHome,
   categoryTemplates: {
     default: DefaultCategory,
-    cases: CasesCategory,
-    products: DefaultCategory,
-    events: DefaultCategory
+    'case-study': CasesCategory,
+    'product-note': DefaultCategory,
+    'event-promo': DefaultCategory
   },
   postTemplates: {
     default: DefaultPost,
-    cases: DefaultPost,
-    products: DefaultPost,
-    events: DefaultPost
+    'case-study': DefaultPost,
+    'product-note': DefaultPost,
+    'event-promo': DefaultPost
   }
 }

@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import { SECONDARY_LOCALES } from './lib/i18n'
-import { writeStaticContentDataModule } from './lib/generate-static-content'
 
 function readFrontMatter(filePath: string) {
   const raw = fs.readFileSync(filePath, 'utf-8')
@@ -117,12 +116,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/main.css'],
   hooks: {
-    'builder:watch'() {
-      writeStaticContentDataModule()
-    },
-    'ready'() {
-      writeStaticContentDataModule()
-    },
     'pages:extend'(pages) {
       const root = process.cwd()
       const localizedRoutes = [

@@ -1,27 +1,31 @@
 ---
 slug: /about
-title: 关于
-summary: 关于这个演示框架
-bodyTitle: 核心设计原则
+title: 关于项目
+summary: 关于 Jenna Press
+bodyTitle: 为什么要启动这个项目
 seo:
-  title: 关于 | Jenna Press
-  description: 了解这个 Nuxt 静态企业站演示背后的核心理念。
-  canonical: https://example.com/zh/about
+  title: 关于项目 | Jenna Press
+  description: 了解 Jenna Press 的背景、初衷与范围边界。
+  canonical: https://example.com/about
 blocks:
   - type: feature-grid
-    title: 当前目录职责
+    title: Jenna Press 背后的背景
     items:
-      - title: content/
-        description: 存放站点配置和 Markdown 内容实例。后续版本可以扩展成文章、产品、文档或 FAQ 集合。
-      - title: templates/
-        description: 存放模板级渲染器、私有区块、样式以及页头页脚结构。
-      - title: lib/schema.ts
-        description: 提供轻量校验，让内容错误尽早暴露，而不是静默渲染出损坏页面。
+      - title: 太多小网站最后都变成了“意外的应用”
+        description: 许多网站项目最初只是简单发布需求，后来却慢慢漂移成仪表盘、运行时 API 和脆弱的部署链路。
+      - title: 小团队需要清晰边界
+        description: 一个静态项目之所以更容易维护，是因为内容作者、模板开发者和框架规则各自都有稳定位置。
+      - title: 多语言支持应该是设计出来的，而不是补出来的
+        description: 英文、德文、中文内容应该共享同一套路由与持久化规则，而不是各自一套临时做法。
+  - type: cta-banner
+    title: 继续阅读设计原则
+    description: Principles 页面会解释，为什么 Jenna Press 要坚持 static-only、theme 平级以及对生成文件的严格定位。
+    action:
+      label: 阅读 Principles
+      to: /principles
 ---
-这个演示刻意保持边界清晰。它不是为了替代 WordPress，也不是为了成为完整的网站 SaaS，更不是要解决所有 CMS 场景。
+Jenna Press 的出发点，是让项目网站更容易说明、更容易 review、也更容易部署。
 
-第一个目标，是证明企业网站可以由一个稳定契约来产出：**template + content + schema**。
+它不是为了和大型 CMS 产品竞争，也不是为了把所有网站场景统一塞进一个框架。它更像是一套收敛的基础设施：适合项目官网、产品叙事、小型博客和多语言发布，但不鼓励为了“以后可能会用到”而提前引入后端。
 
-### 为什么这很重要
-
-当这个契约稳定之后，你就可以创建新的模板，增加更多内容模型，甚至后续在同一套数据结构之上做一个小型可视化编辑器。
+所以这个项目故意保持范围克制。相比无限弹性，它更重视清晰契约。

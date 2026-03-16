@@ -1,60 +1,64 @@
 ---
 slug: /
 title: 首页
-summary: Nuxt 静态企业主页
+summary: Jenna Press 首页
 seo:
-  title: Jenna Press | 快速构建，全球交付
-  description: 一个基于 Nuxt 的极简静态企业网站演示，使用模板驱动的内容区块和可扩展的博客模型。
-  canonical: https://example.com/zh/
+  title: Jenna Press | 一个 static-first 内容框架
+  description: Jenna Press 是一个面向项目官网、说明型页面和博客发布的 static-first 多语言框架。
+  canonical: https://example.com/
 blocks:
   - type: hero
-    kicker: Nuxt SiteKit v0.0.8
-    title: 面向企业官网与内容页面的静态站点框架
-    description: 这一版把页面和文章内容迁移到了 Markdown 中，因此后续更新会比维护大型 JSON 文件友好得多。
+    kicker: Jenna Press
+    title: 一个面向项目网站的 static-first 框架，强调清晰结构与快速交付
+    description: Jenna Press 把内容、模板和框架规则分开，让小团队可以发布多语言网站，而不必把一个简单官网慢慢做成依赖服务端的复杂应用。
     primaryAction:
       label: 阅读博客
-      to: /zh/blog
+      to: /blog
     secondaryAction:
-      label: 联系我们
-      to: /zh/contact
-    panelTitle: v0.0.8 的变化
+      label: 了解项目
+      to: /about
+    panelTitle: 当前已经支持的内容
     panelLines:
-      - 页面使用 Markdown 内容文件
-      - 博客文章使用 Markdown 内容文件
-      - Front matter 加 Markdown 正文
+      - 静态页面与博客发布
+      - 英语默认，外加德语与中文
+      - 浏览器内 theme 与语言记忆
   - type: feature-grid
-    title: 为什么这套架构比一次性网站更容易扩展
-    description: 目标不是重新造一个 WordPress，而是给小团队一个稳定契约，用于复用模板并更快交付静态网站。
+    title: 为什么会有这个项目
+    description: Jenna Press 面向的是那些希望拥有稳定静态发布流程，而不是再接一个模糊全能 CMS 承诺的团队。
     items:
-      - title: 模板驱动页面
-        description: 公共页面保持简单。只需选择一个全局模板，然后持续编辑 Markdown 文件。
-      - title: Markdown 优先的内容方式
-        description: Front matter 负责元数据，正文则保持对人类作者友好、可读。
-      - title: 适合 Cloudflare 的输出
-        description: 当前结构坚持静态优先，一旦继续完善，就能很好地适配低运维部署。
+      - title: 静态优先交付
+        description: 这个项目面向纯静态部署、良好 SEO 和低运维复杂度。
+      - title: 内容与模板分离
+        description: 内容编辑主要在 markdown 中完成，视觉变化留在模板里，而不是渗透到每一个页面文件。
+      - title: 多语言从结构层设计
+        description: 英语是默认版本，德语和中文是同等级内容版本，而不是事后补丁。
   - type: stats
-    title: 当前演示的边界
-    description: 这个项目仍然只想做一个聚焦于官网与内容页面的轻量框架，而不是通用应用构建器。
+    title: 当前支持程度
+    description: 这个框架有意保持边界收敛，但对项目官网来说已经具备实用性。
     items:
+      - value: '3'
+        label: 语言版本
+        note: 英语、德语、中文采用同一套发布模型。
       - value: '2'
-        label: 页面模板
-        note: Corporate basic 与 SaaS landing。
-      - value: '2'
-        label: 内容模型
-        note: 页面与文章现在可以独立演进。
+        label: 博客类目
+        note: Project 与 Usage 让信息结构保持紧凑。
       - value: '0'
-        label: 后台面板
-        note: 仍然完全由文件驱动，并坚持静态优先。
+        label: 运行时 API
+        note: 按项目规则，框架坚持 static-only。
   - type: cta-banner
-    title: 下一步自然会走向更丰富的内容集合
-    description: 从这里出发，你可以继续扩展产品、FAQ、文档或多语言内容，而无需改变核心理念。
+    title: 先看官方页面，再去博客深入阅读
+    description: 首页给总览，About 讲背景，Principles 讲规则，博客负责展开项目与使用主题。
     action:
-      label: 浏览博客文章
-      to: /zh/blog
-bodyTitle: 为什么 Markdown 很重要
+      label: 查看项目文章
+      to: /blog/project
+bodyTitle: Jenna Press 想证明什么
 ---
-即使对开发者来说，维护一个大型 JSON 文档也并不愉快。Markdown 默认就能提供更好的内容编写体验。
+Jenna Press 建立在一个很简单的判断上：一个项目网站完全可以在 **快速、多语言、可维护** 的前提下存在，而不必演变成一个依赖服务端的平台。
 
-你现在可以把 **SEO 元数据和结构化区块** 放在 front matter 中，同时用普通 Markdown 写真正的页面文案。
+这个框架刻意把三条边界分清。
 
-这意味着项目可以继续保持聚焦和静态优先，但日常内容编辑会变得更自然、更有人味。
+- **内容** 放在 markdown 里。
+- **模板** 负责表现层。
+- **框架规则** 负责路由、持久化和校验。
+
+正因为这种分离，项目才能保持克制，同时又具备实际价值。

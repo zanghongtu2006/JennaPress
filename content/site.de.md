@@ -7,19 +7,17 @@ themes:
   - dark
   - pink
   - light
-tagline: Schnell bauen und global ausliefern.
+tagline: Ein static-first Content-Framework für schnelle mehrsprachige Websites.
 nav:
   - label: Start
     to: /de
-  - label: Über uns
+  - label: Über das Projekt
     to: /de/about
+  - label: Prinzipien
+    to: /de/principles
   - label: Blog
     to: /de/blog
-  - label: Fälle
-    to: /de/blog/cases
-  - label: Kontakt
-    to: /de/contact
-footerText: Eine minimale statische Nuxt-Unternehmenswebsite als Demo.
+footerText: Static-first, mehrsprachig und konsequent template-getrieben.
 contactEmail: hello@example.com
 socialLinks:
   - label: GitHub

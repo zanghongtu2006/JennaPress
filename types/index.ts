@@ -56,7 +56,7 @@ export type ContactBlock = {
   address?: string
 }
 
-export type Block = HeroBlock | FeatureGridBlock | RichTextBlock | CtaBannerBlock | StatsBlock | ContactBlock
+export type Block = HeroBlock | FeatureGridBlock | RichTextBlock | CtaBannerBlock | StatsBlock
 
 export type SiteConfig = {
   name: string

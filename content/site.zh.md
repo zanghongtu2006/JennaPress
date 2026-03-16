@@ -7,19 +7,17 @@ themes:
   - dark
   - pink
   - light
-tagline: 快速构建，全球交付。
+tagline: 一个面向多语言网站的 static-first 内容框架。
 nav:
   - label: 首页
     to: /zh
-  - label: 关于
+  - label: 关于项目
     to: /zh/about
+  - label: 设计原则
+    to: /zh/principles
   - label: 博客
     to: /zh/blog
-  - label: 案例
-    to: /zh/blog/cases
-  - label: 联系
-    to: /zh/contact
-footerText: 一个极简的 Nuxt 静态企业站演示。
+footerText: 以静态优先、多语言与模板驱动为核心设计。
 contactEmail: hello@example.com
 socialLinks:
   - label: GitHub

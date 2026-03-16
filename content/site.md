@@ -7,19 +7,17 @@ themes:
   - dark
   - pink
   - light
-tagline: Build fast and ship globally.
+tagline: A static-first content framework for fast multilingual sites.
 nav:
   - label: Home
     to: /
   - label: About
     to: /about
+  - label: Principles
+    to: /principles
   - label: Blog
     to: /blog
-  - label: Case
-    to: /blog/cases
-  - label: Contact
-    to: /contact
-footerText: A minimal Nuxt static corporate site demo.
+footerText: Static-first, multilingual, and template-driven by design.
 contactEmail: hello@example.com
 socialLinks:
   - label: GitHub

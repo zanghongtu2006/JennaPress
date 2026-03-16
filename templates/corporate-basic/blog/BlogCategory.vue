@@ -6,7 +6,7 @@ import blogConfig from './blog.config'
 const props = defineProps<{ site: SiteConfig; categories: BlogCategory[]; category: BlogCategory | null; posts: BlogPostSummary[] }>()
 
 const activeComponent = computed(() => {
-  const key = props.category?.slug || 'default'
+  const key = props.category?.accent || 'default'
   return blogConfig.categoryTemplates[key as keyof typeof blogConfig.categoryTemplates] || blogConfig.categoryTemplates.default
 })
 </script>

@@ -1,27 +1,31 @@
 ---
 slug: /about
 title: About
-summary: About this demo framework
-bodyTitle: Core design principles
+summary: About Jenna Press
+bodyTitle: Why this project was started
 seo:
   title: About | Jenna Press
-  description: Learn the core ideas behind the Nuxt static corporate site demo.
+  description: Learn the background, motivation, and scope of Jenna Press.
   canonical: https://example.com/about
 blocks:
   - type: feature-grid
-    title: Current folder responsibilities
+    title: The background behind Jenna Press
     items:
-      - title: content/
-        description: Stores site configuration and markdown content instances. In later versions, this can grow into posts, products, docs, or FAQ collections.
-      - title: templates/
-        description: Contains template-level renderers, private sections, styles, and footer/header structures.
-      - title: lib/schema.ts
-        description: Performs lightweight validation so content mistakes fail early instead of silently rendering broken pages.
+      - title: Too many small sites become accidental apps
+        description: Many website projects start as simple publishing work, then drift into custom dashboards, runtime APIs, and fragile deployment stories.
+      - title: Small teams need clear boundaries
+        description: A static project becomes easier to maintain when content authors, template authors, and framework rules each have a stable place to work.
+      - title: Multilingual delivery should be designed, not patched
+        description: English, German, and Chinese content should follow one route and persistence model instead of three unrelated conventions.
+  - type: cta-banner
+    title: Continue with the design rules
+    description: The principles page explains why Jenna Press keeps static-only delivery, equal themes, and generated files under strict control.
+    action:
+      label: Read the principles
+      to: /principles
 ---
-This demo is intentionally narrow. It is not trying to replace WordPress, not trying to become a full website SaaS, and not trying to solve every CMS scenario.
+Jenna Press was started to make project websites easier to explain, easier to review, and easier to deploy.
 
-The first goal is to prove that a corporate website can be produced from a stable contract: **template + content + schema**.
+The goal is not to compete with large CMS products. The goal is to give a focused framework to teams that need an official project site, a product narrative, a small blog, and multilingual support without adding a backend by habit.
 
-### Why this matters
-
-Once the contract is stable, you can create new templates, add more content models, and later build a small visual editor on top of the same data structure.
+That is why the project keeps its scope narrow. It prefers a clear contract over endless flexibility.

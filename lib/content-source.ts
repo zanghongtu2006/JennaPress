@@ -42,7 +42,9 @@ function normalizePostSlug(slug: string) {
 }
 
 function slugifyCategory(input: string) {
-  return input.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  const normalized = input.normalize('NFKC').trim().toLowerCase()
+  const slug = normalized.replace(/[^\p{Letter}\p{Number}]+/gu, '-').replace(/^-+|-+$/g, '')
+  return slug || 'general'
 }
 
 function toCategoryLabel(input: string) {
@@ -55,100 +57,23 @@ function toCategoryLabel(input: string) {
     .join(' ')
 }
 
-function inferCategoryAccent(slug: string): BlogCategoryAccent {
-  if (slug === 'cases') return 'case-study'
-  if (slug === 'products') return 'product-note'
-  if (slug === 'events') return 'event-promo'
-  return 'default'
+function isBlogCategoryAccent(value: string | undefined): value is BlogCategoryAccent {
+  return value === 'default' || value === 'case-study' || value === 'product-note' || value === 'event-promo'
 }
 
-const categoryLocaleText: Record<string, Partial<Record<SupportedLocale, { label: string, description: string, listTitle: string }>>> = {
-  architecture: {
-    de: {
-      label: 'Architektur',
-      description: 'Architekturbeiträge zu Struktur, Rendering-Verträgen und statischer Delivery.',
-      listTitle: 'Architekturartikel'
-    },
-    zh: {
-      label: '架构',
-      description: '围绕结构设计、渲染契约与静态交付方式的架构文章。',
-      listTitle: '架构文章'
-    }
+const genericCategoryText: Record<SupportedLocale, { description: (label: string) => string; listTitle: (label: string) => string }> = {
+  en: {
+    description: (label) => `${label} posts grouped under one first-level CMS category.`,
+    listTitle: (label) => `${label} articles`
   },
-  strategy: {
-    de: {
-      label: 'Strategie',
-      description: 'Strategische Beiträge über statische Websites, Delivery-Modelle und langfristige Produktentscheidungen.',
-      listTitle: 'Strategieartikel'
-    },
-    zh: {
-      label: '策略',
-      description: '关于静态网站、交付模式和长期产品方向的策略文章。',
-      listTitle: '策略文章'
-    }
+  de: {
+    description: (label) => `${label}-Beiträge in einer Blog-Kategorie der ersten Ebene.`,
+    listTitle: (label) => `${label}-Artikel`
   },
-  cases: {
-    de: {
-      label: 'Fallstudien',
-      description: 'Belegstarke Geschichten, die zeigen, wie Unternehmen Ergebnisse für bestimmte Kunden oder Segmente erzielt haben.',
-      listTitle: 'Kundengeschichten und Umsetzungs-Snapshots'
-    },
-    zh: {
-      label: '案例',
-      description: '以证据为中心的案例故事，展示企业如何为特定客户或行业交付结果。',
-      listTitle: '客户故事与实施快照'
-    }
-  },
-  products: {
-    de: {
-      label: 'Produkte',
-      description: 'Produktorientierte Beiträge zu Fähigkeiten,定价和市场定位。'.replace('定价', 'Preisgestaltung'),
-      listTitle: 'Feature-Releases und Produkterklärungen'
-    },
-    zh: {
-      label: '产品',
-      description: '面向产品能力、定价包装与市场定位的文章。',
-      listTitle: '功能发布与产品解读'
-    }
-  },
-  events: {
-    de: {
-      label: 'Events',
-      description: 'Kampagnen-, Webinar- und Konferenzupdates mit stärkerer zeitlicher Dringlichkeit.',
-      listTitle: '活动预告与一线更新'
-    },
-    zh: {
-      label: '活动',
-      description: '适合用更强时效感来呈现的活动、研讨会与会议更新。',
-      listTitle: '活动预告与现场更新'
-    }
-  },
-  general: {
-    de: {
-      label: 'Allgemein',
-      description: 'Beiträge, die unter einer allgemeinen Blog-Kategorie zusammengefasst sind.',
-      listTitle: 'Allgemeine Artikel'
-    },
-    zh: {
-      label: '通用',
-      description: '归档在通用博客分类下的文章。',
-      listTitle: '通用文章'
-    }
+  zh: {
+    description: (label) => `归档在一级博客分类“${label}”下的文章。`,
+    listTitle: (label) => `${label}文章`
   }
-}
-
-function inferCategoryDescription(label: string, slug: string): string {
-  if (slug === 'cases') return 'Proof-heavy stories that show how a company delivered outcomes for specific clients or segments.'
-  if (slug === 'products') return 'Product-oriented posts that explain capabilities, packaging, and market positioning.'
-  if (slug === 'events') return 'Campaign, webinar, and conference updates that benefit from a higher-energy presentation style.'
-  return `${label} posts grouped under one first-level CMS category.`
-}
-
-function inferCategoryListTitle(label: string, slug: string): string {
-  if (slug === 'cases') return 'Customer stories and implementation snapshots'
-  if (slug === 'products') return 'Feature launches and product explainers'
-  if (slug === 'events') return 'Upcoming activities and field updates'
-  return `${label} articles`
 }
 
 function markdownToRichTextBlock(markdown: string, title?: string): RichTextBlock | null {
@@ -342,23 +267,34 @@ function getPostMapForLocale(locale: SupportedLocale) {
   return map
 }
 
-function buildCategoryMeta(categoryValue: string, locale: SupportedLocale = DEFAULT_LOCALE): BlogCategory {
-  const label = toCategoryLabel(categoryValue)
-  const slug = slugifyCategory(categoryValue || 'general')
-  const localized = categoryLocaleText[slug]?.[locale]
+function buildCategoryMeta(post: PostContent, locale: SupportedLocale = DEFAULT_LOCALE): BlogCategory {
+  const extra = post as PostContent & {
+    categoryKey?: string
+    categorySlug?: string
+    categoryLabel?: string
+    categoryDescription?: string
+    categoryListTitle?: string
+    categoryAccent?: string
+  }
+
+  const categoryValue = typeof post.category === 'string' && post.category.trim() ? post.category.trim() : 'General'
+  const label = typeof extra.categoryLabel === 'string' && extra.categoryLabel.trim() ? extra.categoryLabel.trim() : toCategoryLabel(categoryValue)
+  const slug = typeof extra.categorySlug === 'string' && extra.categorySlug.trim() ? slugifyCategory(extra.categorySlug) : slugifyCategory(categoryValue)
+  const text = genericCategoryText[locale]
+
   return {
-    key: categoryValue || 'General',
+    key: typeof extra.categoryKey === 'string' && extra.categoryKey.trim() ? extra.categoryKey.trim() : categoryValue || 'General',
     slug,
-    label: localized?.label || label,
-    description: localized?.description || inferCategoryDescription(label, slug),
-    accent: inferCategoryAccent(slug),
-    listTitle: localized?.listTitle || inferCategoryListTitle(label, slug)
+    label,
+    description: typeof extra.categoryDescription === 'string' && extra.categoryDescription.trim() ? extra.categoryDescription.trim() : text.description(label),
+    accent: isBlogCategoryAccent(extra.categoryAccent) ? extra.categoryAccent : 'default',
+    listTitle: typeof extra.categoryListTitle === 'string' && extra.categoryListTitle.trim() ? extra.categoryListTitle.trim() : text.listTitle(label)
   }
 }
 
 function toBlogPost(post: PostContent, locale: SupportedLocale = DEFAULT_LOCALE): BlogPostContent {
   const categoryValue = typeof post.category === 'string' && post.category.trim() ? post.category.trim() : 'General'
-  const categoryMeta = buildCategoryMeta(categoryValue, locale)
+  const categoryMeta = buildCategoryMeta(post, locale)
   return {
     ...post,
     category: categoryValue,
@@ -412,8 +348,7 @@ export function getPostBySlug(slug: string, locale: SupportedLocale = DEFAULT_LO
 export function getBlogCategories(locale: SupportedLocale = DEFAULT_LOCALE): BlogCategory[] {
   const categories = new Map<string, BlogCategory>()
   for (const post of getAllPosts(locale)) {
-    const categoryValue = typeof post.category === 'string' && post.category.trim() ? post.category.trim() : 'General'
-    const meta = buildCategoryMeta(categoryValue, locale)
+    const meta = buildCategoryMeta(post, locale)
     categories.set(meta.slug, meta)
   }
   return Array.from(categories.values()).sort((a, b) => a.label.localeCompare(b.label))

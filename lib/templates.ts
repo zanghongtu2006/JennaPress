@@ -16,25 +16,34 @@ export function getAllTemplateMetas(): TemplateMeta[] {
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
 
-  const result: TemplateMeta[] = []
-
-  for (const dir of dirs) {
+  return dirs.map((dir) => {
     const metaPath = path.join(templatesDir, dir, 'template.meta.json')
-    if (!existsSync(metaPath)) continue
 
-    const raw = readFileSync(metaPath, 'utf-8')
-    const meta = JSON.parse(raw)
+    if (!existsSync(metaPath)) {
+      return {
+        name: dir,
+        label: dir
+      }
+    }
 
-    if (!meta?.name || !meta?.label) continue
+    try {
+      const raw = readFileSync(metaPath, 'utf-8')
+      const meta = JSON.parse(raw)
 
-    result.push({
-      name: String(meta.name),
-      label: String(meta.label),
-      description: meta.description ? String(meta.description) : undefined
-    })
-  }
-
-  return result
+      return {
+        name: dir,
+        label: typeof meta?.label === 'string' && meta.label.trim() ? meta.label.trim() : dir,
+        description: typeof meta?.description === 'string' && meta.description.trim()
+          ? meta.description.trim()
+          : undefined
+      }
+    } catch {
+      return {
+        name: dir,
+        label: dir
+      }
+    }
+  })
 }
 
 export function ensureTemplateExists(templateName: string) {

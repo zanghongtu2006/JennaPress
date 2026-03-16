@@ -1,60 +1,64 @@
 ---
 slug: /
-title: Startseite
-summary: Statische Nuxt-Unternehmenshomepage
+title: Start
+summary: Jenna Press Startseite
 seo:
-  title: Jenna Press | Schnell bauen und global ausliefern
-  description: Eine minimale statische Unternehmenswebsite auf Basis von Nuxt mit template-gesteuerten Inhaltsblöcken und einem wachsenden Blog-Modell.
-  canonical: https://example.com/de/
+  title: Jenna Press | Ein static-first Content-Framework
+  description: Jenna Press ist ein static-first Framework für mehrsprachige Projektwebsites, dokumentationsnahe Seiten und Blog-Publishing.
+  canonical: https://example.com/
 blocks:
   - type: hero
-    kicker: Nuxt SiteKit v0.0.8
-    title: Ein statisches Site-Framework für Unternehmenswebsites und Inhaltsseiten
-    description: Diese Version verschiebt Seiten- und Beitragsinhalte in Markdown, damit spätere Aktualisierungen deutlich freundlicher sind als das Bearbeiten großer JSON-Dateien.
+    kicker: Jenna Press
+    title: Ein static-first Framework für Projektwebsites mit klarer Struktur und schneller Auslieferung
+    description: Jenna Press trennt Inhalte, Templates und Framework-Regeln, damit kleine Teams mehrsprachige Websites veröffentlichen können, ohne aus einer einfachen Site versehentlich eine serverlastige Anwendung zu machen.
     primaryAction:
       label: Blog lesen
-      to: /de/blog
+      to: /blog
     secondaryAction:
-      label: Kontakt aufnehmen
-      to: /de/contact
-    panelTitle: Was sich in v0.0.8 geändert hat
+      label: Über das Projekt
+      to: /about
+    panelTitle: Was das Projekt bereits unterstützt
     panelLines:
-      - Markdown-Inhaltsdateien für Seiten
-      - Markdown-Inhaltsdateien für Blogbeiträge
-      - Front Matter plus Markdown-Textkörper
+      - Statische Seiten- und Blog-Veröffentlichung
+      - Englisch als Standard sowie Deutsch und Chinesisch
+      - Theme- und Sprachpersistenz im Browser
   - type: feature-grid
-    title: Warum diese Architektur besser skaliert als Einweg-Websites
-    description: Das Ziel ist nicht, WordPress nachzubauen. Das Ziel ist, kleinen Teams einen stabilen Vertrag zu geben, um Templates wiederzuverwenden und statische Websites schneller auszuliefern.
+    title: Warum dieses Projekt existiert
+    description: Jenna Press wurde für Teams entwickelt, die einen verlässlichen statischen Publishing-Workflow statt eines unklaren All-in-one-CMS-Versprechens brauchen.
     items:
-      - title: Template-gesteuerte Seiten
-        description: Öffentliche Seiten bleiben einfach. Wähle ein globales Template und bearbeite dann weiter nur Markdown-Dateien.
-      - title: Markdown-first-Inhalte
-        description: Front Matter übernimmt Metadaten, während der eigentliche Inhalt lesbar und angenehm für Menschen bleibt.
-      - title: Cloudflare-freundliche Ausgabe
-        description: Die Struktur bleibt statisch orientiert und ist bereit für Low-Ops-Deployment, sobald die Demo weiter gehärtet wird.
+      - title: Static-first Auslieferung
+        description: Das Projekt ist für reines statisches Hosting, starke SEO und geringe Betriebs-Komplexität ausgelegt.
+      - title: Trennung von Content und Template
+        description: Redakteure arbeiten überwiegend in Markdown, während visuelle Änderungen in den Templates bleiben.
+      - title: Mehrsprachigkeit mit Struktur
+        description: Englisch ist die Standardversion, Deutsch und Chinesisch sind vollwertige Inhaltsvarianten statt nachträglicher Ergänzungen.
   - type: stats
-    title: Die aktuelle Grenze der Demo
-    description: Dieses Projekt bleibt bewusst ein schlankes Framework für offizielle Websites und Inhaltsseiten und nicht ein universeller App-Builder.
+    title: Aktueller Unterstützungsgrad
+    description: Das Framework ist bewusst fokussiert, aber für Projektwebsites bereits praktisch nutzbar.
     items:
+      - value: '3'
+        label: Sprachen
+        note: Englisch, Deutsch und Chinesisch folgen demselben Publishing-Modell.
       - value: '2'
-        label: Seitentemplates
-        note: Corporate Basic und SaaS Landing.
-      - value: '2'
-        label: Inhaltsmodelle
-        note: Seiten und Beiträge entwickeln sich jetzt unabhängig voneinander.
+        label: Blog-Kategorien
+        note: Project und Usage halten die Informationsarchitektur kompakt.
       - value: '0'
-        label: Backend-Panels
-        note: Weiterhin vollständig dateibasiert und statisch zuerst.
+        label: Runtime-APIs
+        note: Das Framework ist per Projektregel static-only.
   - type: cta-banner
-    title: Der nächste natürliche Schritt sind reichhaltigere Sammlungen
-    description: Von hier aus kannst du Produkte, FAQs, Doku oder mehrsprachige Inhalte erweitern, ohne die Grundidee zu ändern.
+    title: Starte mit den offiziellen Seiten und gehe dann in den Blog
+    description: Die Startseite gibt den Überblick, About erklärt den Hintergrund, Principles definiert die Regeln und der Blog vertieft Projekt- und Nutzungsthemen.
     action:
-      label: Blogbeiträge ansehen
-      to: /de/blog
-bodyTitle: Warum Markdown wichtig ist
+      label: Projektartikel öffnen
+      to: /blog/project
+bodyTitle: Was Jenna Press zeigen will
 ---
-Selbst für Entwickler ist das Aktualisieren eines großen JSON-Dokuments nicht besonders angenehm. Markdown bietet standardmäßig ein deutlich besseres Bearbeitungserlebnis.
+Jenna Press basiert auf einer einfachen These: Eine Projektwebsite kann **schnell, mehrsprachig und wartbar** bleiben, ohne zu einer serverabhängigen Plattform zu werden.
 
-Du kannst jetzt **SEO-Metadaten und strukturierte Blöcke** im Front Matter behalten und den eigentlichen Seitentext in normalem Markdown schreiben.
+Das Framework hält drei Grenzen klar.
 
-So bleibt dieses Projekt schlank und statisch orientiert, während die tägliche Inhaltspflege deutlich menschlicher wird.
+- **Content** lebt in Markdown.
+- **Templates** steuern die Darstellung.
+- **Framework-Regeln** steuern Routing, Persistenz und Validierung.
+
+Gerade diese Trennung erlaubt es dem Projekt, klein und zugleich praktisch zu bleiben.

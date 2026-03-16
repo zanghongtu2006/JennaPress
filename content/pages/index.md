@@ -1,60 +1,64 @@
 ---
 slug: /
 title: Home
-summary: Nuxt static corporate homepage
+summary: Jenna Press homepage
 seo:
-  title: Jenna Press | Build fast and ship globally
-  description: A minimal Nuxt-based static corporate site demo with template-driven content blocks and a growing blog model.
+  title: Jenna Press | A static-first content framework
+  description: Jenna Press is a static-first multilingual framework for project sites, documentation-style pages, and blog publishing.
   canonical: https://example.com/
 blocks:
   - type: hero
-    kicker: Nuxt SiteKit v0.0.8
-    title: A static site framework for corporate websites and content pages
-    description: This version moves page and post content into markdown, so future updates are much friendlier than editing large JSON files.
+    kicker: Jenna Press
+    title: A static-first framework for project websites that need clear structure and fast delivery
+    description: Jenna Press separates content, templates, and framework rules so a small team can publish multilingual sites without turning a simple website into a server-heavy application.
     primaryAction:
       label: Read the blog
       to: /blog
     secondaryAction:
-      label: Contact us
-      to: /contact
-    panelTitle: What changed in v0.0.8
+      label: About the project
+      to: /about
+    panelTitle: What this project already supports
     panelLines:
-      - Markdown content files for pages
-      - Markdown content files for blog posts
-      - Front matter plus markdown body
+      - Static page and blog publishing
+      - English as default, plus German and Chinese
+      - Theme and language persistence in the browser
   - type: feature-grid
-    title: Why this architecture scales better than one-off websites
-    description: The goal is not to recreate WordPress. The goal is to give a small team a stable contract for reusing templates and shipping static websites faster.
+    title: Why this project exists
+    description: Jenna Press was created for teams that want a reliable static publishing workflow instead of a vague all-in-one CMS promise.
     items:
-      - title: Template-driven pages
-        description: Public pages stay simple. Pick one global template, then keep editing markdown files.
-      - title: Markdown-first content
-        description: Front matter handles metadata, while the body stays readable and pleasant for humans.
-      - title: Cloudflare-friendly output
-        description: The structure stays static-first and ready for low-ops deployment once the demo is hardened further.
+      - title: Static-first delivery
+        description: The project is designed for pure static deployment, strong SEO, and low operational complexity.
+      - title: Content-template separation
+        description: Editors work mainly in markdown, while visual changes stay inside templates instead of leaking into every page file.
+      - title: Multilingual by structure
+        description: English is the default version, while German and Chinese are first-class content variants rather than afterthoughts.
   - type: stats
-    title: The current demo boundary
-    description: This still aims to be a narrow framework for official websites and content pages, not a general-purpose app builder.
+    title: Current support level
+    description: The framework is intentionally narrow, but the supported surface is already practical for project websites.
     items:
+      - value: '3'
+        label: languages
+        note: English, German, and Chinese use the same publishing model.
       - value: '2'
-        label: page templates
-        note: Corporate basic and SaaS landing.
-      - value: '2'
-        label: content models
-        note: Pages and posts now evolve independently.
+        label: blog categories
+        note: Project and Usage keep the information architecture compact.
       - value: '0'
-        label: backend panels
-        note: Still fully file-driven and static-first.
+        label: runtime APIs
+        note: The framework is static-only by project rule.
   - type: cta-banner
-    title: The next natural step is richer collections
-    description: From here you can extend toward products, FAQs, docs, or multi-language content without changing the core idea.
+    title: Start with the official pages, then continue in the blog
+    description: Home gives the overview, About explains the background, Principles defines the rules, and the blog carries the deeper project and usage topics.
     action:
-      label: Browse blog posts
-      to: /blog
-bodyTitle: Why markdown matters
+      label: Browse project articles
+      to: /blog/project
+bodyTitle: What Jenna Press is trying to prove
 ---
-Even for developers, updating a large JSON document is not very pleasant. Markdown gives you a much better default authoring experience.
+Jenna Press is built around a simple claim: a project website can stay **fast, multilingual, and maintainable** without growing into a server-dependent platform.
 
-You can now keep **SEO metadata and structured blocks** in front matter, while writing the real page copy in normal markdown.
+The framework keeps three boundaries clear.
 
-That means this project can stay narrow and static-first, but the day-to-day content editing becomes much more humane.
+- **Content** lives in markdown.
+- **Templates** control presentation.
+- **Framework rules** control routing, persistence, and validation.
+
+That separation is the reason the project can remain small while still being practical.
