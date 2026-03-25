@@ -77,12 +77,12 @@ function validatePostBodyBlock(block: any, index: number) {
 
   switch (block.type) {
     case 'rich-text':
-      ensureString(block.html, `body[${index}].html`)
+      ensureText(block.html, `body[${index}].html`)
       return
     case 'cta-banner':
-      ensureString(block.title, `body[${index}].title`)
-      ensureString(block.action?.label, `body[${index}].action.label`)
-      ensureString(block.action?.to, `body[${index}].action.to`)
+      ensureText(block.title, `body[${index}].title`)
+      ensureText(block.action?.label, `body[${index}].action.label`)
+      ensureText(block.action?.to, `body[${index}].action.to`)
       return
     default:
       throw new Error(`Unsupported post body block type: ${block.type}`)
@@ -90,9 +90,9 @@ function validatePostBodyBlock(block: any, index: number) {
 }
 
 export function validateSiteConfig(input: any): SiteConfig {
-  ensureString(input?.name, 'site.name')
-  ensureString(input?.logoText, 'site.logoText')
-  ensureString(input?.defaultTemplate, 'site.defaultTemplate')
+  ensureText(input?.name, 'site.name')
+  ensureText(input?.logoText, 'site.logoText')
+  ensureText(input?.defaultTemplate, 'site.defaultTemplate')
   ensureOptionalString(input?.defaultTheme, 'site.defaultTheme')
   ensureOptionalStringArray(input?.themes, 'site.themes')
   ensureArray(input?.nav, 'site.nav')
@@ -111,11 +111,11 @@ export function validatePageContent(input: any): PageContent {
 
 export function validatePostContent(input: any): PostContent {
   ensureString(input?.slug, 'post.slug')
-  ensureString(input?.title, 'post.title')
-  ensureString(input?.summary, 'post.summary')
-  ensureString(input?.publishedAt, 'post.publishedAt')
-  ensureString(input?.seo?.title, 'post.seo.title')
-  ensureString(input?.seo?.description, 'post.seo.description')
+  ensureText(input?.title, 'post.title')
+  ensureText(input?.summary, 'post.summary')
+  ensureText(input?.publishedAt, 'post.publishedAt')
+  ensureText(input?.seo?.title, 'post.seo.title')
+  ensureText(input?.seo?.description, 'post.seo.description')
   ensureArray(input?.body, 'post.body').forEach((block, index) => validatePostBodyBlock(block, index))
   return input as PostContent
 }
