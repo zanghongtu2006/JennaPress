@@ -102,9 +102,9 @@ export function validateSiteConfig(input: any): SiteConfig {
 export function validatePageContent(input: any): PageContent {
   ensureFieldAbsent(input?.template, 'page.template')
   ensureString(input?.slug, 'page.slug')
-  ensureString(input?.title, 'page.title')
-  ensureString(input?.seo?.title, 'page.seo.title')
-  ensureString(input?.seo?.description, 'page.seo.description')
+  ensureText(input?.title, 'page.title')
+  ensureText(input?.seo?.title, 'page.seo.title')
+  ensureText(input?.seo?.description, 'page.seo.description')
   ensureArray(input?.blocks, 'page.blocks').forEach((block, index) => validateGenericBlock(block, index))
   return input as PageContent
 }
