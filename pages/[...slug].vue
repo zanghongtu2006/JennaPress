@@ -54,9 +54,6 @@ useHead(() => ({
 
 <template>
   <TemplateFrameRenderer v-if="site" :template="site.defaultTemplate" :site="site">
-    <div class="container page-meta-row">
-      <div class="page-meta-label">{{ page.title }}</div>
-    </div>
     <TemplateRenderer :template="site.defaultTemplate" :page="page" />
   </TemplateFrameRenderer>
 </template>
