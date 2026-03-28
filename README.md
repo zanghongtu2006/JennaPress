@@ -1,5 +1,7 @@
 # JennaPress
 
+[![Website](https://img.shields.io/badge/Website-www.jennapress.com-blue)](https://www.jennapress.com)
+
 ![Project Name](https://img.shields.io/badge/Project-JennaPress-8A2BE2?style=for-the-badge)
 ![Framework](https://img.shields.io/badge/Framework-Nuxt_3-00DC82?style=for-the-badge&logo=nuxt.js)
 ![Strategy](https://img.shields.io/badge/Strategy-Static_First-blue?style=for-the-badge)
