@@ -1,0 +1,7 @@
+*.md text=off
+*.ts text=off
+*.js text=off
+*.json text=off
+*.vue text=off
+*.css text=off
+*.html text=off
