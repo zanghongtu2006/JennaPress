@@ -1,7 +1,7 @@
 ---
 slug: release-notes-v0-0-2
 title: "Release Notes: First Stars on GitHub"
-summary: JennaPress receives its first GitHub Stars â€?what it means, who found it, and what's next.
+summary: JennaPress receives its first GitHub Stars â€” what it means, who found it, and what's next.
 publishedAt: "2026-03-29"
 category: Project
 tags:
@@ -13,7 +13,7 @@ author:
 seo:
   title: "Release Notes: First Stars on GitHub | Jenna Press"
   description: JennaPress just got its first 2 Stars on GitHub. Here's the story behind it.
-  canonical: https://www.jennapress.com/blog/project/release-notes-v0-0-2
+  canonical: https://example.com/blog/project/release-notes-v0-0-2
 bodyTitle: Someone out there thinks this is worth a star
 bodyBlocks:
   - type: cta-banner
@@ -29,21 +29,21 @@ Today, JennaPress received its first two Stars.
 
 ## What happened
 
-Two people found JennaPress on GitHub, gave it a look, and decided to star it. That is it. That is the whole story â€?and also the most meaningful part.
+Two people found JennaPress on GitHub, gave it a look, and decided to star it. That is it. That is the whole story â€” and also the most meaningful part.
 
 ## What JennaPress is, briefly
 
 For those who are just finding this: JennaPress is a static-first Nuxt CMS starter built around three ideas:
 
-- **Category-driven modular templates** â€?swap templates without rebuilding content
-- **AI-optimized logic** â€?structured to work well with AI code generation and AI content workflows
-- **Seamless design switching** â€?dark, light, pink themes that swap without layout shifts
+- **Category-driven modular templates** â€” swap templates without rebuilding content
+- **AI-optimized logic** â€” structured to work well with AI code generation and AI content workflows
+- **Seamless design switching** â€” dark, light, pink themes that swap without layout shifts
 
 You can find the full description and documentation on GitHub.
 
 ## What this means for the project
 
-The first Star does not change the roadmap. The project still focuses on small project websites that need a homepage, a few official pages, and a structured blog â€?nothing more.
+The first Star does not change the roadmap. The project still focuses on small project websites that need a homepage, a few official pages, and a structured blog â€” nothing more.
 
 But it does confirm something worth confirming: someone besides the author finds the approach useful.
 
@@ -53,4 +53,4 @@ The plan remains the same: keep the boundaries clean, improve the template syste
 
 ---
 
-If you are one of the two who starred it â€?thank you. That is the kind of signal that makes open source maintainers keep going.
+If you are one of the two who starred it â€” thank you. That is the kind of signal that makes open source maintainers keep going.
