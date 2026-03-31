@@ -2,7 +2,9 @@
 
 import type { BlogCategory, BlogPostSummary, SiteConfig } from '~/types'
 
-defineProps<{ site: SiteConfig; categories: BlogCategory[]; sections: Array<{ category: BlogCategory; posts: BlogPostSummary[] }> }>()
+const props = defineProps<{ site: SiteConfig; categories: BlogCategory[]; sections: Array<{ category: BlogCategory; posts: BlogPostSummary[] }>; locale?: string; defaultLocale?: string }>()
+
+const p = (path) => (props.locale && props.locale !== props.defaultLocale) ? ('/' + props.locale + path) : path
 
 </script>
 
