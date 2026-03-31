@@ -1,10 +1,10 @@
-﻿---
+---
 slug: /about
-title: 脺ber das Projekt
-summary: 脺ber Jenna Press
+title: Über das Projekt
+summary: Über Jenna Press
 bodyTitle: Warum dieses Projekt gestartet wurde
 seo:
-  title: 脺ber das Projekt | Jenna Press
+  title: Über das Projekt | Jenna Press
   description: Hintergrund, Motivation und Umfang von Jenna Press.
   canonical: https://www.jennapress.com/about/
 blocks:
@@ -19,13 +19,13 @@ blocks:
         description: Englische, deutsche und chinesische Inhalte sollten einem gemeinsamen Routing- und Persistenzmodell folgen.
   - type: cta-banner
     title: Weiter zu den Gestaltungsregeln
-    description: Die Principles-Seite erkl盲rt, warum Jenna Press static-only, gleichrangige Themes und einen strengen Umgang mit generierten Dateien beibeh盲lt.
+    description: Die Principles-Seite erklärt, warum Jenna Press static-only, gleichrangige Themes und einen strengen Umgang mit generierten Dateien beibehält.
     action:
       label: Principles lesen
       to: /de/principles
 ---
-Jenna Press wurde begonnen, um Projektwebsites leichter erkl盲rbar, leichter reviewbar und leichter deploybar zu machen.
+Jenna Press wurde begonnen, um Projektwebsites leichter erklärbar, leichter reviewbar und leichter deploybar zu machen.
 
-Das Ziel ist nicht, mit gro脽en CMS-Produkten zu konkurrieren. Das Ziel ist ein fokussiertes Framework f眉r Teams, die eine offizielle Projektwebsite, eine Produktgeschichte, einen kleinen Blog und Mehrsprachigkeit brauchen, ohne aus Gewohnheit ein Backend hinzuzuf眉gen.
+Das Ziel ist nicht, mit großen CMS-Produkten zu konkurrieren. Das Ziel ist ein fokussiertes Framework für Teams, die eine offizielle Projektwebsite, eine Produktgeschichte, einen kleinen Blog und Mehrsprachigkeit brauchen, ohne aus Gewohnheit ein Backend hinzuzufügen.
 
-Darum bleibt der Projektumfang bewusst schmal. Ein klarer Vertrag ist wertvoller als endlose Flexibilit盲t.
+Darum bleibt der Projektumfang bewusst schmal. Ein klarer Vertrag ist wertvoller als endlose Flexibilität.

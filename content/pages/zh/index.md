@@ -1,40 +1,64 @@
-﻿---
+---
 slug: /
-title: 棣栭〉
-summary: Jenna Press 棣栭〉
+title: 首页
+summary: Jenna Press 首页
 seo:
-  title: Jenna Press | 涓€涓?static-first 鍐呭妗嗘灦
-  description: Jenna Press 鏄竴涓潰鍚戦」鐩畼缃戙€佽鏄庡瀷椤甸潰鍜屽崥瀹㈠彂甯冪殑 static-first 澶氳瑷€妗嗘灦銆?  canonical: https://www.jennapress.com/
+  title: Jenna Press | 一个 static-first 内容框架
+  description: Jenna Press 是一个面向项目官网、说明型页面和博客发布的 static-first 多语言框架。
+  canonical: https://www.jennapress.com/
 blocks:
   - type: hero
     kicker: Jenna Press
-    title: 涓€涓潰鍚戦」鐩綉绔欑殑 static-first 妗嗘灦锛屽己璋冩竻鏅扮粨鏋勪笌蹇€熶氦浠?    description: Jenna Press 鎶婂唴瀹广€佹ā鏉垮拰妗嗘灦瑙勫垯鍒嗗紑锛岃灏忓洟闃熷彲浠ュ彂甯冨璇█缃戠珯锛岃€屼笉蹇呮妸涓€涓畝鍗曞畼缃戞參鎱㈠仛鎴愪緷璧栨湇鍔＄鐨勫鏉傚簲鐢ㄣ€?    primaryAction:
-      label: 闃呰鍗氬
+    title: 一个面向项目网站的 static-first 框架，强调清晰结构与快速交付
+    description: Jenna Press 把内容、模板和框架规则分开，让小团队可以发布多语言网站，而不必把一个简单官网慢慢做成依赖服务端的复杂应用。
+    primaryAction:
+      label: 阅读博客
       to: /zh/blog
     secondaryAction:
-      label: 浜嗚В椤圭洰
+      label: 了解项目
       to: /zh/about
-    panelTitle: 褰撳墠宸茬粡鏀寔鐨勫唴瀹?    panelLines:
-      - 闈欐€侀〉闈笌鍗氬鍙戝竷
-      - 鑻辫榛樿锛屽鍔犲痉璇€佷腑鏂囥€佽タ鐝墮璇拰甯岃厞璇?      - 娴忚鍣ㄥ唴 theme 涓庤瑷€璁板繂
+    panelTitle: 当前已经支持的内容
+    panelLines:
+      - 静态页面与博客发布
+      - 英语默认，外加德语、中文、西班牙语和希腊语
+      - 浏览器内 theme 与语言记忆
   - type: feature-grid
-    title: 涓轰粈涔堜細鏈夎繖涓」鐩?    description: Jenna Press 闈㈠悜鐨勬槸閭ｄ簺甯屾湜鎷ユ湁绋冲畾闈欐€佸彂甯冩祦绋嬶紝鑰屼笉鏄啀鎺ヤ竴涓ā绯婂叏鑳?CMS 鎵胯鐨勫洟闃熴€?    items:
-      - title: 闈欐€佷紭鍏堜氦浠?        description: 杩欎釜椤圭洰闈㈠悜绾潤鎬侀儴缃层€佽壇濂?SEO 鍜屼綆杩愮淮澶嶆潅搴︺€?      - title: 鍐呭涓庢ā鏉垮垎绂?        description: 鍐呭缂栬緫涓昏鍦?markdown 涓畬鎴愶紝瑙嗚鍙樺寲鐣欏湪妯℃澘閲岋紝鑰屼笉鏄笚閫忓埌姣忎竴涓〉闈㈡枃浠躲€?      - title: 澶氳瑷€浠庣粨鏋勫眰璁捐
-        description: 鑻辫鏄粯璁ょ増鏈紝寰疯銆佷腑鏂囥€佽タ鐝墮璇拰甯岃厞璇槸鍚岀瓑绾у唴瀹圭増鏈紝鑰屼笉鏄簨鍚庤ˉ涓併€?  - type: stats
-    title: 褰撳墠鏀寔绋嬪害
-    description: 杩欎釜妗嗘灦鏈夋剰淇濇寔杈圭晫鏀舵暃锛屼絾瀵归」鐩畼缃戞潵璇村凡缁忓叿澶囧疄鐢ㄦ€с€?    items:
+    title: 为什么会有这个项目
+    description: Jenna Press 面向的是那些希望拥有稳定静态发布流程，而不是再接一个模糊全能 CMS 承诺的团队。
+    items:
+      - title: 静态优先交付
+        description: 这个项目面向纯静态部署、良好 SEO 和低运维复杂度。
+      - title: 内容与模板分离
+        description: 内容编辑主要在 markdown 中完成，视觉变化留在模板里，而不是渗透到每一个页面文件。
+      - title: 多语言从结构层设计
+        description: 英语是默认版本，德语、中文、西班牙语和希腊语是同等级内容版本，而不是事后补丁。
+  - type: stats
+    title: 当前支持程度
+    description: 这个框架有意保持边界收敛，但对项目官网来说已经具备实用性。
+    items:
       - value: '5'
-        label: 璇█鐗堟湰
-        note: 鑻辫銆佸痉璇€佷腑鏂囥€佽タ鐝墮璇€佸笇鑵婅閲囩敤鍚屼竴濂楀彂甯冩ā鍨嬨€?      - value: '2'
-        label: 鍗氬绫荤洰
-        note: Project 涓?Usage 璁╀俊鎭粨鏋勪繚鎸佺揣鍑戙€?      - value: '0'
-        label: 杩愯鏃?API
-        note: 鎸夐」鐩鍒欙紝妗嗘灦鍧氭寔 static-only銆?  - type: cta-banner
-    title: 鍏堢湅瀹樻柟椤甸潰锛屽啀鍘诲崥瀹㈡繁鍏ラ槄璇?    description: 棣栭〉缁欐€昏锛孉bout 璁茶儗鏅紝Principles 璁茶鍒欙紝鍗氬璐熻矗灞曞紑椤圭洰涓庝娇鐢ㄤ富棰樸€?    action:
-      label: 鏌ョ湅椤圭洰鏂囩珷
+        label: 语言版本
+        note: 英语、德语、中文、西班牙语、希腊语采用同一套发布模型。
+      - value: '2'
+        label: 博客类目
+        note: Project 与 Usage 让信息结构保持紧凑。
+      - value: '0'
+        label: 运行时 API
+        note: 按项目规则，框架坚持 static-only。
+  - type: cta-banner
+    title: 先看官方页面，再去博客深入阅读
+    description: 首页给总览，About 讲背景，Principles 讲规则，博客负责展开项目与使用主题。
+    action:
+      label: 查看项目文章
       to: /zh/blog/project
-bodyTitle: Jenna Press 鎯宠瘉鏄庝粈涔?---
-Jenna Press 寤虹珛鍦ㄤ竴涓緢绠€鍗曠殑鍒ゆ柇涓婏細涓€涓」鐩綉绔欏畬鍏ㄥ彲浠ュ湪 **蹇€熴€佸璇█銆佸彲缁存姢** 鐨勫墠鎻愪笅瀛樺湪锛岃€屼笉蹇呮紨鍙樻垚涓€涓緷璧栨湇鍔＄鐨勫钩鍙般€?
-杩欎釜妗嗘灦鍒绘剰鎶婁笁鏉¤竟鐣屽垎娓呫€?
-- **鍐呭** 鏀惧湪 markdown 閲屻€?- **妯℃澘** 璐熻矗琛ㄧ幇灞傘€?- **妗嗘灦瑙勫垯** 璐熻矗璺敱銆佹寔涔呭寲鍜屾牎楠屻€?
-姝ｅ洜涓鸿繖绉嶅垎绂伙紝椤圭洰鎵嶈兘淇濇寔鍏嬪埗锛屽悓鏃跺張鍏峰瀹為檯浠峰€笺€?
+bodyTitle: Jenna Press 想证明什么
+---
+Jenna Press 建立在一个很简单的判断上：一个项目网站完全可以在 **快速、多语言、可维护** 的前提下存在，而不必演变成一个依赖服务端的平台。
+
+这个框架刻意把三条边界分清。
+
+- **内容** 放在 markdown 里。
+- **模板** 负责表现层。
+- **框架规则** 负责路由、持久化和校验。
+
+正因为这种分离，项目才能保持克制，同时又具备实际价值。

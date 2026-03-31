@@ -1,4 +1,4 @@
-﻿---
+---
 slug: generated-files-and-source-of-truth
 title: Generierte Dateien und Source of Truth
 summary: Wie Jenna Press generierte Dateien behandelt und warum Markdown-Content die Quelle der Wahrheit bleibt.
@@ -19,11 +19,11 @@ bodyBlocks:
     title: Weiterlesen innerhalb von Jenna Press
     description: Nutze die Blog-Kategorien, um zwischen Projektkontext und praktischer Anwendung zu wechseln.
     action:
-      label: Zur眉ck zum Blog
+      label: Zurück zum Blog
       to: /de/blog
 ---
-In Jenna Press darf eine generierte Datei existieren, weil statisches Publishing trotzdem eine praktische Br眉cke zwischen Quellinhalten und Runtime-Rendering braucht. Das macht die generierte Datei aber nicht zu dem Ort, an dem Redakteure arbeiten sollten.
+In Jenna Press darf eine generierte Datei existieren, weil statisches Publishing trotzdem eine praktische Brücke zwischen Quellinhalten und Runtime-Rendering braucht. Das macht die generierte Datei aber nicht zu dem Ort, an dem Redakteure arbeiten sollten.
 
-Die Quelle der Wahrheit bleiben die Markdown-Inhalte und die Generierungslogik, die sie transformiert. Generierte Ausgabe kann aus praktischen Gr眉nden versioniert werden, sollte aber als Ausgabe behandelt, als Ausgabe reviewed und bei 脛nderungen an der echten Quelle neu erzeugt werden.
+Die Quelle der Wahrheit bleiben die Markdown-Inhalte und die Generierungslogik, die sie transformiert. Generierte Ausgabe kann aus praktischen Gründen versioniert werden, sollte aber als Ausgabe behandelt, als Ausgabe reviewed und bei Änderungen an der echten Quelle neu erzeugt werden.
 
-Diese Unterscheidung ist wichtig, weil sie sowohl die Klarheit beim Schreiben als auch die Klarheit im Code Review sch眉tzt.
+Diese Unterscheidung ist wichtig, weil sie sowohl die Klarheit beim Schreiben als auch die Klarheit im Code Review schützt.

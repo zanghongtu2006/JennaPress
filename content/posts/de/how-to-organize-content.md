@@ -1,4 +1,4 @@
-﻿---
+---
 slug: how-to-organize-content
 title: Wie Inhalte organisiert werden
 summary: Eine praktische Anleitung zur Strukturierung von Seiten, Posts, Sprachen und stabilen Quelldateien in Jenna Press.
@@ -19,11 +19,11 @@ bodyBlocks:
     title: Weiterlesen innerhalb von Jenna Press
     description: Nutze die Blog-Kategorien, um zwischen Projektkontext und praktischer Anwendung zu wechseln.
     action:
-      label: Zur眉ck zum Blog
+      label: Zurück zum Blog
       to: /de/blog
 ---
-In Jenna Press sollten offizielle Seiten wenige bleiben und einen stabilen Zweck haben. Home erkl盲rt das Projekt schnell, About erkl盲rt den Hintergrund, und Principles erkl盲rt die Regeln.
+In Jenna Press sollten offizielle Seiten wenige bleiben und einen stabilen Zweck haben. Home erklärt das Projekt schnell, About erklärt den Hintergrund, und Principles erklärt die Regeln.
 
-Der Blog wird danach zur Erweiterungsebene. Project-Artikel erkl盲ren, warum das Framework existiert und was es aktuell unterst眉tzt. Usage-Artikel erkl盲ren den Umgang mit Content, Templates und Deployment.
+Der Blog wird danach zur Erweiterungsebene. Project-Artikel erklären, warum das Framework existiert und was es aktuell unterstützt. Usage-Artikel erklären den Umgang mit Content, Templates und Deployment.
 
-Diese Trennung h盲lt die Startseite lesbar und die Informationsarchitektur kompakt, auch wenn die Gesamtmenge der Inhalte w盲chst.
+Diese Trennung hält die Startseite lesbar und die Informationsarchitektur kompakt, auch wenn die Gesamtmenge der Inhalte wächst.

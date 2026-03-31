@@ -1,6 +1,8 @@
-﻿---
+---
 slug: what-this-project-is
-title: 杩欎釜椤圭洰鏄粈涔?summary: 浠庡畾浣嶃€侀€傜敤鑼冨洿鍜屾敮鎸佺殑缃戠珯绫诲瀷涓変釜瑙掑害浠嬬粛 Jenna Press銆?publishedAt: "2026-03-16"
+title: 这个项目是什么
+summary: 从定位、适用范围和支持的网站类型三个角度介绍 Jenna Press。
+publishedAt: "2026-03-16"
 category: Project
 tags:
   - jenna-press
@@ -8,15 +10,20 @@ tags:
 author:
   name: Jenna Press
 seo:
-  title: 杩欎釜椤圭洰鏄粈涔?| Jenna Press
-  description: 鐞嗚В Jenna Press 璇曞浘瑙ｅ喅鐨勯棶棰橈紝浠ュ強瀹冧负浠€涔堝埢鎰忎繚鎸佽寖鍥存敹鏁涖€?  canonical: https://www.jennapress.com/blog/project/what-this-project-is/
-bodyTitle: 涓€涓竟鐣屾槑纭€佽亴璐ｆ竻鏅扮殑妗嗘灦
+  title: 这个项目是什么 | Jenna Press
+  description: 理解 Jenna Press 试图解决的问题，以及它为什么刻意保持范围收敛。
+  canonical: https://www.jennapress.com/blog/project/what-this-project-is/
+bodyTitle: 一个边界明确、职责清晰的框架
 bodyBlocks:
   - type: cta-banner
-    title: 缁х画鍦?Jenna Press 涓槄璇?    description: 閫氳繃鍗氬绫荤洰鍦ㄩ」鐩儗鏅笌瀹為檯浣跨敤璇存槑涔嬮棿缁х画闃呰銆?    action:
-      label: 杩斿洖鍗氬
+    title: 继续在 Jenna Press 中阅读
+    description: 通过博客类目在项目背景与实际使用说明之间继续阅读。
+    action:
+      label: 返回博客
       to: /zh/blog
 ---
-Jenna Press 鏄竴涓潰鍚戝皬鍨嬮」鐩綉绔欑殑 static-first 妗嗘灦锛岄€傚悎鎵胯浇棣栭〉銆佸皯閲忓畼鏂归〉闈互鍙婁竴涓粨鏋勬竻鏅扮殑鍗氬銆傚畠骞朵笉璇曞浘鍙樻垚涓€涓€氱敤 CMS銆佷竴涓?headless 骞冲彴锛屾垨鑰呬竴涓悗绔骇鍝併€?
-瀹冪殑鐩爣寰堟槑纭細鍐呭鏀惧湪 markdown锛屾ā鏉跨暀鍦?template 鐩綍閲岋紝妗嗘灦瑙勫垯淇濇寔鍙鏈熴€傚彧瑕佽繖浜涜竟鐣屼笉琚墦鏁ｏ紝涓€涓皬缃戠珯灏辫兘闀挎湡淇濇寔瀹规槗鍙戝竷銆佸鏄撴紨杩涖€?
-涔熸鍥犲姝わ紝杩欎釜椤圭洰榛樿鍙繚鐣欎袱涓崥瀹㈢被鐩細**Project** 鐢ㄦ潵瑙ｉ噴妗嗘灦鏈韩锛?*Usage** 鐢ㄦ潵璇存槑濡備綍浣跨敤瀹冦€?
+Jenna Press 是一个面向小型项目网站的 static-first 框架，适合承载首页、少量官方页面以及一个结构清晰的博客。它并不试图变成一个通用 CMS、一个 headless 平台，或者一个后端产品。
+
+它的目标很明确：内容放在 markdown，模板留在 template 目录里，框架规则保持可预期。只要这些边界不被打散，一个小网站就能长期保持容易发布、容易演进。
+
+也正因如此，这个项目默认只保留两个博客类目：**Project** 用来解释框架本身，**Usage** 用来说明如何使用它。

@@ -1,7 +1,8 @@
-﻿---
+---
 slug: prompt-files-and-their-roles
-title: Prompt 鏂囦欢鍙婂叾鑱岃矗
-summary: 浠嬬粛浠撳簱涓殑涓や釜 prompt 鏂囦欢锛屼互鍙婂畠浠垎鍒壙鎷呬粈涔堣亴璐ｃ€?publishedAt: "2026-03-19"
+title: Prompt 文件及其职责
+summary: 介绍仓库中的两个 prompt 文件，以及它们分别承担什么职责。
+publishedAt: "2026-03-19"
 category: Project
 tags:
   - jenna-press
@@ -9,14 +10,20 @@ tags:
 author:
   name: Jenna Press
 seo:
-  title: Prompt 鏂囦欢鍙婂叾鑱岃矗 | Jenna Press
-  description: 浜嗚В浠撳簱涓殑 prompt 鏂囦欢濡備綍鏈嶅姟浜庢ā鏉跨敓鎴愪笌鍐呭缁存姢銆?  canonical: https://www.jennapress.com/blog/project/prompt-files-and-their-roles/
-bodyTitle: Prompt 鏂囦欢搴旇鍑忓皯姝т箟锛岃€屼笉鏄埗閫犳涔?bodyBlocks:
+  title: Prompt 文件及其职责 | Jenna Press
+  description: 了解仓库中的 prompt 文件如何服务于模板生成与内容维护。
+  canonical: https://www.jennapress.com/blog/project/prompt-files-and-their-roles/
+bodyTitle: Prompt 文件应该减少歧义，而不是制造歧义
+bodyBlocks:
   - type: cta-banner
-    title: 缁х画鍦?Jenna Press 涓槄璇?    description: 閫氳繃鍗氬绫荤洰鍦ㄩ」鐩儗鏅笌瀹為檯浣跨敤璇存槑涔嬮棿缁х画闃呰銆?    action:
-      label: 杩斿洖鍗氬
+    title: 继续在 Jenna Press 中阅读
+    description: 通过博客类目在项目背景与实际使用说明之间继续阅读。
+    action:
+      label: 返回博客
       to: /zh/blog
 ---
-Jenna Press 淇濈暀涓や釜 prompt 鏂囦欢锛屾槸鍥犱负鈥滅敓鎴愭ā鏉库€濆拰鈥滅淮鎶ゅ唴瀹光€濊繖涓ら」宸ヤ綔鏈夊叧鑱旓紝浣嗗苟涓嶇浉鍚屻€傛ā鏉?prompt 搴旇甯姪 AI 浜у嚭鍏煎妗嗘灦鐨勭粨鏋滐紱缁存姢 prompt 搴旇甯姪 AI 鏇存柊鍐呭锛屽悓鏃堕伩鍏嶉『鎵嬬牬鍧忕粨鏋勩€?
-鎶婅繖涓ょ被鑱岃矗鎷嗗紑锛屼細璁╂寚浠ゆ洿绮剧‘锛屼篃鏇存湁鍒╀簬鍚庣画 review锛屽洜涓烘瘡涓?prompt 鏂囦欢鐨勬剰鍥鹃兘淇濇寔鍙銆?
-鎵€浠ワ紝prompt 鏂囦欢鏈川涓婃槸涓€绉嶅崗浣滃伐鍏枫€傚畠搴旇缂栫爜杈圭晫銆侀鏈熻緭鍑虹粨鏋勫拰 review 绾緥銆?
+Jenna Press 保留两个 prompt 文件，是因为“生成模板”和“维护内容”这两项工作有关联，但并不相同。模板 prompt 应该帮助 AI 产出兼容框架的结果；维护 prompt 应该帮助 AI 更新内容，同时避免顺手破坏结构。
+
+把这两类职责拆开，会让指令更精确，也更有利于后续 review，因为每个 prompt 文件的意图都保持可见。
+
+所以，prompt 文件本质上是一种协作工具。它应该编码边界、预期输出结构和 review 纪律。

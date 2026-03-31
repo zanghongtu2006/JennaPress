@@ -1,7 +1,7 @@
-﻿---
+---
 slug: what-this-project-is
 title: Was dieses Projekt ist
-summary: Ein 脺berblick 眉ber Jenna Press, seinen Einsatzzweck und die Art von Websites, die unterst眉tzt werden sollen.
+summary: Ein Überblick über Jenna Press, seinen Einsatzzweck und die Art von Websites, die unterstützt werden sollen.
 publishedAt: "2026-03-16"
 category: Project
 tags:
@@ -19,11 +19,11 @@ bodyBlocks:
     title: Weiterlesen innerhalb von Jenna Press
     description: Nutze die Blog-Kategorien, um zwischen Projektkontext und praktischer Anwendung zu wechseln.
     action:
-      label: Zur眉ck zum Blog
+      label: Zurück zum Blog
       to: /de/blog
 ---
-Jenna Press ist ein static-first Framework f眉r kleine Projektwebsites, die eine Startseite, einige offizielle Unterseiten und einen strukturierten Blog ben枚tigen. Es will weder ein allgemeines CMS noch eine Headless-Plattform oder ein Backend-Produkt werden.
+Jenna Press ist ein static-first Framework für kleine Projektwebsites, die eine Startseite, einige offizielle Unterseiten und einen strukturierten Blog benötigen. Es will weder ein allgemeines CMS noch eine Headless-Plattform oder ein Backend-Produkt werden.
 
-Der gedachte Einsatz ist klar: Inhalte bleiben in Markdown, Templates bleiben in Template-Verzeichnissen, und Framework-Regeln bleiben vorhersagbar. Wenn diese Grenzen sichtbar bleiben, l盲sst sich auch eine kleine Website leicht ver枚ffentlichen und weiterentwickeln.
+Der gedachte Einsatz ist klar: Inhalte bleiben in Markdown, Templates bleiben in Template-Verzeichnissen, und Framework-Regeln bleiben vorhersagbar. Wenn diese Grenzen sichtbar bleiben, lässt sich auch eine kleine Website leicht veröffentlichen und weiterentwickeln.
 
-Darum beh盲lt das Projekt standardm盲脽ig nur zwei Blog-Kategorien: **Project** zum Verst盲ndnis des Frameworks selbst und **Usage** f眉r die praktische Anwendung.
+Darum behält das Projekt standardmäßig nur zwei Blog-Kategorien: **Project** zum Verständnis des Frameworks selbst und **Usage** für die praktische Anwendung.

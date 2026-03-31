@@ -1,6 +1,8 @@
-﻿---
+---
 slug: why-this-project-exists
-title: 涓轰粈涔堜細鏈夎繖涓」鐩?summary: 瑙ｉ噴 Jenna Press 鐨勮捣鐐癸紝浠ュ強瀹冭瘯鍥捐В鍐崇殑鐜板疄闂銆?publishedAt: "2026-03-16"
+title: 为什么会有这个项目
+summary: 解释 Jenna Press 的起点，以及它试图解决的现实问题。
+publishedAt: "2026-03-16"
 category: Project
 tags:
   - jenna-press
@@ -8,15 +10,20 @@ tags:
 author:
   name: Jenna Press
 seo:
-  title: 涓轰粈涔堜細鏈夎繖涓」鐩?| Jenna Press
-  description: 闃呰 Jenna Press 鐨勮捣鐐癸紝浠ュ強涓轰粈涔?static-first 杈圭晫濡傛閲嶈銆?  canonical: https://www.jennapress.com/blog/project/why-this-project-exists/
-bodyTitle: 浠庢剰澶栧鏉傚害鍥炲埌娓呮櫚濂戠害
+  title: 为什么会有这个项目 | Jenna Press
+  description: 阅读 Jenna Press 的起点，以及为什么 static-first 边界如此重要。
+  canonical: https://www.jennapress.com/blog/project/why-this-project-exists/
+bodyTitle: 从意外复杂度回到清晰契约
 bodyBlocks:
   - type: cta-banner
-    title: 缁х画鍦?Jenna Press 涓槄璇?    description: 閫氳繃鍗氬绫荤洰鍦ㄩ」鐩儗鏅笌瀹為檯浣跨敤璇存槑涔嬮棿缁х画闃呰銆?    action:
-      label: 杩斿洖鍗氬
+    title: 继续在 Jenna Press 中阅读
+    description: 通过博客类目在项目背景与实际使用说明之间继续阅读。
+    action:
+      label: 返回博客
       to: /zh/blog
 ---
-寰堝缃戠珯椤圭洰鏈€鍒濆彧鏄畝鍗曠殑鍙戝竷闇€姹傦紝浣嗗緢蹇氨浼氫笉鏂彔鍔犺繍琛屾椂 API銆佷复鏃剁紪杈戣鍒欙紝浠ュ強娌′汉鐪熸璐熻矗鐨勯儴缃插喅绛栥€傛渶鍚庡緱鍒扮殑骞朵笉鏄兘鍔涳紝鑰屾槸娣蜂贡銆?
-Jenna Press 鐨勫瓨鍦紝灏辨槸鍥犱负杩欑婕傜Щ闈炲父甯歌锛岃€屼笖鏈潵鍙互閬垮厤銆備竴涓皬鍥㈤槦閫氬父骞朵笉闇€瑕佷竴濂楃鏈?server 灞傦紝鎵嶈兘浠嬬粛涓€涓」鐩€佸彂甯?roadmap 鎴栫淮鎶や竴涓璇█鍗氬銆傚畠鐪熸闇€瑕佺殑鏄竴濂椾笉浼氭瘡鍛ㄩ兘閲嶅啓涓€娆＄殑绋冲畾缁撴瀯銆?
-鎵€浠ヨ繖涓」鐩粠鍙︿竴涓棶棰樺嚭鍙戯細鍦ㄤ繚鎸侀」鐩綉绔欌€滃儚涓€涓寮忎骇鍝佲€濋偅鏍峰彲淇＄殑鍓嶆彁涓嬶紝鏈€灏忓彲琛岀殑妗嗘灦搴旇鏄粈涔堟牱锛?
+很多网站项目最初只是简单的发布需求，但很快就会不断叠加运行时 API、临时编辑规则，以及没人真正负责的部署决策。最后得到的并不是能力，而是混乱。
+
+Jenna Press 的存在，就是因为这种漂移非常常见，而且本来可以避免。一个小团队通常并不需要一套私有 server 层，才能介绍一个项目、发布 roadmap 或维护一个多语言博客。它真正需要的是一套不会每周都重写一次的稳定结构。
+
+所以这个项目从另一个问题出发：在保持项目网站“像一个正式产品”那样可信的前提下，最小可行的框架应该是什么样？
