@@ -2,13 +2,15 @@
 import type { SiteConfig } from '~/types'
 
 defineProps<{ site: SiteConfig }>()
+
+const locale = localStorage.getItem('site-language') || 'en'
 </script>
 
 <template>
   <div class="site-shell">
     <header class="site-header">
       <div class="container header-inner">
-        <NuxtLink to="/" class="brand">
+        <NuxtLink :to="locale === 'en' ? '/' : `/${locale}/`" class="brand">
           <span class="brand-mark">{{ site.logoText }}</span>
           <span>{{ site.name }}</span>
         </NuxtLink>
