@@ -1,7 +1,7 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { BlogCategory, BlogPostSummary, SiteConfig } from '~/types'
 const props = defineProps<{ site: SiteConfig; locale?: string; baseUrl?: string; categories: BlogCategory[]; category: BlogCategory | null; posts: BlogPostSummary[] }>()
-const p = (path: string) => `${props.baseUrl || ''}${props.locale ? `/${props.locale}` : ''}${path}`
+const p = (path: string) => `${props.locale ? `/${props.locale}` : ''}${path}`
 </script>
 
 <template>
