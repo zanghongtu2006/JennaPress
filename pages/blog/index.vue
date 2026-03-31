@@ -56,6 +56,8 @@ useSeoMeta({
       :categories="categories"
       :sections="sections"
       :posts="posts"
+      :locale="locale"
+      :defaultLocale="DEFAULT_LOCALE"
     />
   </TemplateFrameRenderer>
 </template>

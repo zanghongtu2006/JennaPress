@@ -10,7 +10,7 @@ defineProps<{ site: SiteConfig; categories: BlogCategory[]; category: BlogCatego
       <h1 class="template-blog-title">{{ category.listTitle }}</h1>
       <p class="template-blog-description">{{ category.description }}</p>
       <nav class="template-blog-tabs" aria-label="Blog categories">
-        <NuxtLink to="/blog" class="template-blog-tab">All modules</NuxtLink>
+        <NuxtLink :to="p('/blog')" class="template-blog-tab">All modules</NuxtLink>
         <NuxtLink v-for="item in categories" :key="item.slug" :to="`/blog/${item.slug}`" class="template-blog-tab" :class="{ 'is-active': item.slug === category.slug }">{{ item.label }}</NuxtLink>
       </nav>
     </section>
