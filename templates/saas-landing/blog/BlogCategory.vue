@@ -1,9 +1,9 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { computed } from 'vue'
 import type { BlogCategory, BlogPostSummary, SiteConfig } from '~/types'
 import blogConfig from './blog.config'
 
-const props = defineProps<{ site: SiteConfig; locale?: string; baseUrl?: string; categories: BlogCategory[]; category: BlogCategory | null; posts: BlogPostSummary[] }>()
+const props = defineProps<{ site: SiteConfig; locale?: string; defaultLocale?: string; categories: BlogCategory[]; category: BlogCategory | null; posts: BlogPostSummary[] }>()
 
 const activeComponent = computed(() => {
   const key = props.category?.accent || 'default'
@@ -12,5 +12,5 @@ const activeComponent = computed(() => {
 </script>
 
 <template>
-  <component :is="activeComponent" :site="site" :locale="locale" :baseUrl="baseUrl" :categories="categories" :category="category" :posts="posts" />
+  <component :is="activeComponent" :site="site" :locale="locale" :defaultLocale="defaultLocale" :categories="categories" :category="category" :posts="posts" />
 </template>

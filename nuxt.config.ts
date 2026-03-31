@@ -158,13 +158,6 @@ export default defineNuxtConfig({
     hostname: 'https://www.jennapress.com',
   },
 
-  routeRules: {
-    '/:locale/blog/**': { trailingSlash: true },
-    '/:locale/blog': { trailingSlash: true },
-    '/blog/**': { trailingSlash: true },
-    '/blog': { trailingSlash: true },
-  },
-
   hooks: {
     'pages:extend'(pages) {
       const root = process.cwd()
@@ -280,8 +273,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteBaseUrl: 'https://www.jennapress.com/',
-      supportedLocales: SUPPORTED_LOCALES,
-      baseUrl: 'JennaPress'
+      supportedLocales: SUPPORTED_LOCALES
     }
   },
   typescript: {

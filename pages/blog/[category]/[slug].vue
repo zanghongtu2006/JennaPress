@@ -50,7 +50,7 @@ useHead(() => ({
       mode="post"
       :post="post"
       :locale="locale"
-      :baseUrl="baseUrl"
+      :defaultLocale="DEFAULT_LOCALE"
     />
   </TemplateFrameRenderer>
 </template>

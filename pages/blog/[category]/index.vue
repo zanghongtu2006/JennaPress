@@ -57,7 +57,7 @@ useSeoMeta({
       :category="categoryMeta"
       :posts="posts"
       :locale="locale"
-      :baseUrl="baseUrl"
+      :defaultLocale="DEFAULT_LOCALE"
     />
   </TemplateFrameRenderer>
 </template>
