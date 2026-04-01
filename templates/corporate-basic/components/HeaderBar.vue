@@ -4,16 +4,16 @@ import type { SiteConfig } from '~/types'
 defineProps<{ site: SiteConfig }>()
 
 const { app } = useRuntimeConfig()
-const base = computed(() => app.baseURL.replace(/\/$/, ''))
+const homeHref = computed(() => app.baseURL)
 </script>
 
 <template>
   <header class="template-corporate-basic-header">
     <div class="container template-corporate-basic-header-inner">
-      <NuxtLink :to="base + '/'" class="template-corporate-basic-brand">
+      <a :href="homeHref" class="template-corporate-basic-brand">
         <span class="template-corporate-basic-brand-mark">{{ site.logoText }}</span>
         <span>{{ site.name }}</span>
-      </NuxtLink>
+      </a>
 
       <nav class="template-corporate-basic-nav" aria-label="Primary">
         <NuxtLink v-for="item in site.nav" :key="item.to" :to="item.to">
