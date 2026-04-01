@@ -41,9 +41,12 @@ jobs:
         with:
           node-version: "22"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+      - name: Enable Pages
+        uses: actions/enable-pages@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      
+
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
