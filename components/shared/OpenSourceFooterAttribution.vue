@@ -3,7 +3,7 @@
     <span>Powered by open source.</span>
     <a href="https://github.com/zanghongtu2006/JennaPress" target="_blank" rel="noopener noreferrer">GitHub</a>
     <span>·</span>
-    <a href="https://www.zanghongtu.com" target="_blank" rel="noopener noreferrer">Company</a>
+    <a href="https://www.jennapress.com" target="_blank" rel="noopener noreferrer">Company</a>
   </div>
 </template>
 

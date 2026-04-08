@@ -18,8 +18,8 @@ nav:
   - label: 博客
     to: /zh/blog
 footerText: 以静态优先、多语言与模板驱动为核心设计。
-contactEmail: hello@example.com
+contactEmail: zanghongtu2006@gmail.com
 socialLinks:
   - label: GitHub
-    to: https://github.com
+    to: https://github.com/zanghongtu2006/JennaPress
 ---

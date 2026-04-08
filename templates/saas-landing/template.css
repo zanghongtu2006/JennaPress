@@ -138,6 +138,10 @@
   color: #dbe7ff;
 }
 
+html[data-theme='light'] .template-saas-landing {
+  color: rgba(15, 23, 42, 0.76);
+}
+
 .template-saas-landing .page-stack {
   gap: 30px;
 }
@@ -152,6 +156,13 @@
     radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.14), transparent 34%),
     linear-gradient(180deg, #050816 0%, #0a1024 48%, #0c1227 100%);
   border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+html[data-theme='light'] .saas-stage {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(59, 130, 246, 0.10), transparent 22%),
+    radial-gradient(circle at 82% 8%, rgba(168, 85, 247, 0.10), transparent 22%),
+    linear-gradient(180deg, #f8fbff 0%, #eef6ff 60%, #eaf2ff 100%);
 }
 
 .saas-stage-glow {
@@ -234,6 +245,17 @@
   background:
     linear-gradient(180deg, #0b1120 0%, #111827 22%, #0f172a 100%);
   padding: 26px 0 42px;
+}
+
+html[data-theme='light'] .saas-body-shell {
+  background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+}
+
+html[data-theme='light'] .template-saas-landing .hero-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(148, 163, 184, 0.30);
+  color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
 .saas-body-intro {
