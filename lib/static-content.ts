@@ -1,6 +1,6 @@
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
-import { validatePageContent, validatePostContent, validateSiteConfig } from './schema'
+import { validatePageContent, validatePostContent, validateProduct, validateSiteConfig } from './schema'
 import { DEFAULT_LOCALE, isSupportedLocale, prefixPathForLocale, type SupportedLocale } from './i18n'
 import type {
   Block,
@@ -12,6 +12,7 @@ import type {
   NavItem,
   PageContent,
   PostContent,
+  Product,
   RichTextBlock,
   SiteConfig,
 } from '~/types'
@@ -29,6 +30,12 @@ type LocalePayload = {
     categoryMap: Record<string, { category: BlogCategory, posts: BlogPostSummary[] }>
     postMap: Record<string, BlogPostContent>
   }
+  products: {
+    categories: BlogCategory[]
+    products: Product[]
+    categoryMap: Record<string, { category: BlogCategory, products: Product[] }>
+    productMap: Record<string, Product>
+  }
 }
 
 const pageModules = import.meta.glob('../content/pages/**/*.md', {
@@ -44,6 +51,12 @@ const postModules = import.meta.glob('../content/posts/**/*.md', {
 }) as RawModuleMap
 
 const siteModules = import.meta.glob('../content/site*.md', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as RawModuleMap
+
+const productModules = import.meta.glob('../content/products/**/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -241,13 +254,32 @@ function readPostFile(raw: string): PostContent {
   })
 }
 
+function readProductFile(raw: string): Product {
+  const parsed = parseRawMarkdown(raw)
+  const data = (parsed.data || {}) as Record<string, any>
+  return validateProduct({
+    ...data,
+    blocks: Array.isArray(data.blocks) ? data.blocks : [],
+  })
+}
+
 function readSiteFile(raw: string): SiteConfig {
   const parsed = parseRawMarkdown(raw)
   return validateSiteConfig(parsed.data || {})
 }
 
-function getLocalizedModuleEntries(modules: RawModuleMap, collection: 'pages' | 'posts' | 'site', locale: SupportedLocale) {
+function getLocalizedModuleEntries(modules: RawModuleMap, collection: 'pages' | 'posts' | 'site' | 'products', locale: SupportedLocale) {
   return Object.entries(modules).filter(([filePath]) => localeFromPath(filePath, collection) === locale)
+}
+
+function localeFromPathForProducts(filePath: string): SupportedLocale {
+  const normalized = filePath.replace(/\\/g, '/')
+  const match = normalized.match(/\/products\/([a-z0-9-]+)\//i)
+  return match?.[1]?.toLowerCase() || DEFAULT_LOCALE
+}
+
+function getLocalizedProductEntries(modules: RawModuleMap, locale: SupportedLocale) {
+  return Object.entries(modules).filter(([filePath]) => localeFromPathForProducts(filePath) === locale)
 }
 
 function getPageMapForLocale(locale: SupportedLocale) {
@@ -328,7 +360,7 @@ function toBlogPost(post: PostContent, locale: SupportedLocale = DEFAULT_LOCALE)
 }
 
 
-function discoverNav(locale: SupportedLocale, pages: Record<string, PageContent>, posts: BlogPostSummary[]): NavItem[] {
+function discoverNav(locale: SupportedLocale, pages: Record<string, PageContent>, posts: BlogPostSummary[], products: Product[]): NavItem[] {
   const nav: NavItem[] = []
 
   if (pages['/']) {
@@ -354,6 +386,10 @@ function discoverNav(locale: SupportedLocale, pages: Record<string, PageContent>
 
   if (posts.length) {
     nav.push({ label: 'Blog', to: prefixPathForLocale('/blog', locale) })
+  }
+
+  if (products.length) {
+    nav.push({ label: 'Products', to: prefixPathForLocale('/products', locale) })
   }
 
   return nav
@@ -397,9 +433,45 @@ function buildLocalePayload(locale: SupportedLocale): LocalePayload {
     postMap[key] = post
   }
 
+  // Build products data
+  const productEntries = Array.from(getLocalizedProductEntries(productModules, locale).map(([filePath, raw]) => {
+    const product = readProductFile(raw)
+    return product
+  }))
+
+  const productCategories = new Map<string, BlogCategory>()
+  for (const product of productEntries) {
+    const categoryValue = typeof product.category === 'string' && product.category.trim() ? product.category.trim() : 'General'
+    const slug = slugifyCategory(categoryValue)
+    const label = toCategoryLabel(categoryValue)
+    productCategories.set(slug, {
+      key: categoryValue,
+      slug,
+      label,
+      description: label,
+      accent: 'default',
+      listTitle: label,
+    })
+  }
+  const sortedProductCategories = Array.from(productCategories.values()).sort((a, b) => a.label.localeCompare(b.label))
+
+  const productCategoryMap: Record<string, { category: BlogCategory, products: Product[] }> = {}
+  for (const category of sortedProductCategories) {
+    productCategoryMap[category.slug] = {
+      category,
+      products: productEntries.filter(product => slugifyCategory(product.category) === category.slug),
+    }
+  }
+
+  const productMap: Record<string, Product> = {}
+  for (const product of productEntries) {
+    const key = `${slugifyCategory(product.category)}/${product.slug.replace(/^\//, '')}`
+    productMap[key] = product
+  }
+
   const site = getSiteConfigForLocale(locale)
   if (!Array.isArray(site.nav) || site.nav.length === 0) {
-    site.nav = discoverNav(locale, pages, blogPosts)
+    site.nav = discoverNav(locale, pages, blogPosts, productEntries)
   }
 
   return {
@@ -410,6 +482,12 @@ function buildLocalePayload(locale: SupportedLocale): LocalePayload {
       posts: blogPosts,
       categoryMap,
       postMap,
+    },
+    products: {
+      categories: sortedProductCategories,
+      products: productEntries,
+      categoryMap: productCategoryMap,
+      productMap,
     },
   }
 }
@@ -450,4 +528,21 @@ export function getStaticBlogCategoryPayload(category: string, locale?: string |
 export function getStaticBlogPost(category: string, slug: string, locale?: string | null): BlogPostContent | null {
   const key = `${category}/${slug.replace(/^\//, '')}`
   return getLocalePayload(locale).blog.postMap[key] ?? null
+}
+
+export function getStaticProductCategories(locale?: string | null): BlogCategory[] {
+  return getLocalePayload(locale).products.categories
+}
+
+export function getStaticProducts(locale?: string | null): Product[] {
+  return getLocalePayload(locale).products.products
+}
+
+export function getStaticProductCategoryPayload(category: string, locale?: string | null): { category: BlogCategory, products: Product[] } | null {
+  return getLocalePayload(locale).products.categoryMap[category] ?? null
+}
+
+export function getStaticProduct(category: string, slug: string, locale?: string | null): Product | null {
+  const key = `${category}/${slug.replace(/^\//, '')}`
+  return getLocalePayload(locale).products.productMap[key] ?? null
 }

@@ -132,6 +132,51 @@ function readBlogRoutes() {
   return Array.from(routes)
 }
 
+function readProductEntriesForDir(dir: string) {
+  const files = listMarkdownFiles(dir)
+  return files
+    .map((file) => {
+      const data = readFrontMatter(path.join(dir, file))
+      const slug = data?.slug ? String(data.slug).replace(/^\//, '') : ''
+      const category = data?.category ? slugifyCategory(String(data.category)) : 'general'
+      if (!slug) return null
+      return { slug, category }
+    })
+    .filter(Boolean) as Array<{ slug: string, category: string }>
+}
+
+function readProductRoutes() {
+  const productsDir = path.resolve(process.cwd(), 'content/products')
+  const defaultEntries = readProductEntriesForDir(productsDir)
+  const routes = new Set<string>(['/products'])
+
+  for (const entry of defaultEntries) {
+    routes.add(`/products/${entry.category}`)
+    routes.add(`/products/${entry.category}/${entry.slug}`)
+  }
+
+  for (const locale of SECONDARY_LOCALES) {
+    const localizedDir = path.join(productsDir, locale)
+    const merged = new Map<string, { slug: string, category: string }>()
+
+    for (const entry of defaultEntries) {
+      merged.set(entry.slug, entry)
+    }
+
+    for (const entry of readProductEntriesForDir(localizedDir)) {
+      merged.set(entry.slug, entry)
+    }
+
+    routes.add(`/${locale}/products`)
+    for (const entry of merged.values()) {
+      routes.add(`/${locale}/products/${entry.category}`)
+      routes.add(`/${locale}/products/${entry.category}/${entry.slug}`)
+    }
+  }
+
+  return Array.from(routes)
+}
+
 function readDefaultTheme() {
   const sitePath = path.resolve(process.cwd(), 'content/site.md')
   if (!fs.existsSync(sitePath)) {
@@ -176,6 +221,21 @@ export default defineNuxtConfig({
           name: 'locale-blog',
           path: `/:locale(${localePattern})/blog`,
           file: path.resolve(root, 'pages/blog/index.vue')
+        },
+        {
+          name: 'locale-product',
+          path: `/:locale(${localePattern})/products/:category/:slug`,
+          file: path.resolve(root, 'pages/products/[category]/[slug].vue')
+        },
+        {
+          name: 'locale-product-category',
+          path: `/:locale(${localePattern})/products/:category`,
+          file: path.resolve(root, 'pages/products/[category]/index.vue')
+        },
+        {
+          name: 'locale-products',
+          path: `/:locale(${localePattern})/products`,
+          file: path.resolve(root, 'pages/products/index.vue')
         },
         {
           name: 'locale-page',
@@ -267,7 +327,7 @@ export default defineNuxtConfig({
     preset: 'static',
     prerender: {
       autoSubfolderIndex: true,
-      routes: [...readPageRoutes(), ...readBlogRoutes()]
+      routes: [...readPageRoutes(), ...readBlogRoutes(), ...readProductRoutes()]
     }
   },
   runtimeConfig: {

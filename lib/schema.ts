@@ -1,4 +1,4 @@
-import type { Block, PageContent, PostContent, SiteConfig } from '~/types'
+import type { Block, PageContent, PostContent, Product, SiteConfig } from '~/types'
 
 function ensureString(value: unknown, field: string): string {
   if (typeof value !== 'string' || value.trim() === '') {
@@ -118,4 +118,40 @@ export function validatePostContent(input: any): PostContent {
   ensureText(input?.seo?.description, 'post.seo.description')
   ensureArray(input?.body, 'post.body').forEach((block, index) => validatePostBodyBlock(block, index))
   return input as PostContent
+}
+
+export function validateProduct(input: any): Product {
+  ensureString(input?.slug, 'product.slug')
+  ensureText(input?.title, 'product.title')
+  ensureText(input?.description, 'product.description')
+  ensureText(input?.coverImage, 'product.coverImage')
+  ensureArray(input?.previewImages, 'product.previewImages')
+  ensureNumber(input?.price, 'product.price')
+  ensureBoolean(input?.isFree, 'product.isFree')
+  ensureText(input?.downloadUrl, 'product.downloadUrl')
+  ensureText(input?.author, 'product.author')
+  ensureText(input?.authorUrl, 'product.authorUrl')
+  ensureText(input?.category, 'product.category')
+  ensureArray(input?.tags, 'product.tags')
+  ensureNumber(input?.downloadCount, 'product.downloadCount')
+  ensureText(input?.createdAt, 'product.createdAt')
+  ensureText(input?.updatedAt, 'product.updatedAt')
+  if (input?.blocks !== undefined) {
+    ensureArray(input.blocks, 'product.blocks').forEach((block, index) => validateGenericBlock(block, index))
+  }
+  return input as Product
+}
+
+function ensureNumber(value: unknown, field: string): number {
+  if (typeof value !== 'number') {
+    throw new Error(`Invalid field: ${field}`)
+  }
+  return value
+}
+
+function ensureBoolean(value: unknown, field: string): boolean {
+  if (typeof value !== 'boolean') {
+    throw new Error(`Invalid field: ${field}`)
+  }
+  return value
 }

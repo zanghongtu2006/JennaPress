@@ -107,6 +107,13 @@
 .template-post-card.is-cases, .template-category-block.is-cases { border-color: #bfdbfe; }
 .template-post-card.is-products, .template-category-block.is-products { border-color: #c7f9cc; }
 .template-post-card.is-events, .template-category-block.is-events { border-color: #fecdd3; }
+
+.template-product-price { font-size: 1.25rem; font-weight: 700; }
+.template-product-price .price-free { color: #16a34a; }
+.template-product-price .price-value { color: var(--text); }
+.template-product-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+.template-product-downloads { color: var(--muted); font-size: 0.875rem; }
+
 @media (max-width: 960px) { .template-post-grid, .template-post-grid-full { grid-template-columns: 1fr; } }
 
 .corporate-cases-layout { display:grid; grid-template-columns: 320px minmax(0, 1fr); gap: 18px; }

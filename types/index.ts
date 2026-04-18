@@ -119,3 +119,45 @@ export type BlogPostContent = Omit<PostContent, 'category'> & {
   category: string
   categoryMeta: BlogCategory
 }
+
+export type Template = {
+  id: string
+  name: string
+  label: string
+  description?: string
+  version: string
+  author: string
+  tags: string[]
+  category: string
+  downloadCount: number
+  createdAt: string
+  updatedAt: string
+}
+
+export type Creator = {
+  username: string
+  displayName: string
+  avatar?: string
+  bio?: string
+  socialLinks?: Array<{ platform: string; url: string }>
+  templateCount: number
+}
+
+export type Product = {
+  slug: string
+  title: string
+  description: string
+  coverImage: string
+  previewImages: string[]
+  price: number
+  isFree: boolean
+  downloadUrl: string
+  author: string
+  authorUrl: string
+  category: string
+  tags: string[]
+  downloadCount: number
+  createdAt: string
+  updatedAt: string
+  blocks?: Block[]
+}

@@ -5,6 +5,14 @@ export type TemplateMeta = {
   name: string
   label: string
   description?: string
+  author?: string
+  authorUrl?: string
+  category?: string
+  tags?: string[]
+  previewImages?: string[]
+  downloadCount?: number
+  createdAt?: string
+  updatedAt?: string
 }
 
 const templatesDir = path.resolve(process.cwd(), 'templates')
@@ -35,7 +43,15 @@ export function getAllTemplateMetas(): TemplateMeta[] {
         label: typeof meta?.label === 'string' && meta.label.trim() ? meta.label.trim() : dir,
         description: typeof meta?.description === 'string' && meta.description.trim()
           ? meta.description.trim()
-          : undefined
+          : undefined,
+        author: typeof meta?.author === 'string' && meta.author.trim() ? meta.author.trim() : undefined,
+        authorUrl: typeof meta?.authorUrl === 'string' && meta.authorUrl.trim() ? meta.authorUrl.trim() : undefined,
+        category: typeof meta?.category === 'string' && meta.category.trim() ? meta.category.trim() : undefined,
+        tags: Array.isArray(meta?.tags) ? meta.tags.filter((tag: unknown) => typeof tag === 'string') : undefined,
+        previewImages: Array.isArray(meta?.previewImages) ? meta.previewImages.filter((img: unknown) => typeof img === 'string') : undefined,
+        downloadCount: typeof meta?.downloadCount === 'number' ? meta.downloadCount : undefined,
+        createdAt: typeof meta?.createdAt === 'string' && meta.createdAt.trim() ? meta.createdAt.trim() : undefined,
+        updatedAt: typeof meta?.updatedAt === 'string' && meta.updatedAt.trim() ? meta.updatedAt.trim() : undefined
       }
     } catch {
       return {
