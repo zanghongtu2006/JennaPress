@@ -34,9 +34,10 @@ if (productsError.value) throw createError({ statusCode: 500, statusMessage: pro
 
 const categories = computed(() => categoriesData.value ?? [])
 const products = computed(() => productsData.value ?? [])
+const getProductCategorySlug = (product: Product) => product.categoryMeta?.slug ?? ''
 const sections = computed(() => categories.value.map(category => ({
   category,
-  products: products.value.filter(product => product.category === category.key),
+  products: products.value.filter(product => getProductCategorySlug(product) === category.slug),
 })).filter(section => section.products.length > 0))
 
 useSeoMeta({

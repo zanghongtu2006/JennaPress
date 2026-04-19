@@ -27,6 +27,7 @@ if (siteError.value) throw createError({ statusCode: 500, statusMessage: siteErr
 if (productError.value || !productData.value) throw createError({ statusCode: 404, statusMessage: 'Product not found' })
 
 const product = computed(() => productData.value!)
+const categoryMeta = computed(() => product.value.categoryMeta ?? null)
 
 useSeoMeta({
   title: () => product.value.title,
@@ -47,6 +48,7 @@ useHead(() => ({
       :site="site"
       mode="product"
       :product="product"
+      :category="categoryMeta"
       :locale="locale"
       :defaultLocale="DEFAULT_LOCALE"
     />

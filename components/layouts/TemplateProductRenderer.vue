@@ -39,7 +39,7 @@ const showFallback = computed(() => !activeComponent.value)
             <h3 class="font-semibold">{{ product.title }}</h3>
             <p class="text-sm text-gray-600 mt-1">{{ product.description }}</p>
             <NuxtLink
-              :to="`/products/${product.category}/${product.slug}`"
+              :to="`/products/${product.categoryMeta.slug}/${product.slug}`"
               class="inline-block mt-2 text-primary hover:underline text-sm"
             >
               View Details →
@@ -62,7 +62,7 @@ const showFallback = computed(() => !activeComponent.value)
           <h3 class="font-semibold">{{ product.title }}</h3>
           <p class="text-sm text-gray-600 mt-1">{{ product.description }}</p>
           <NuxtLink
-            :to="`/products/${product.category}/${product.slug}`"
+            :to="`/products/${product.categoryMeta.slug}/${product.slug}`"
             class="inline-block mt-2 text-primary hover:underline text-sm"
           >
             View Details →
@@ -74,6 +74,9 @@ const showFallback = computed(() => !activeComponent.value)
     <template v-else-if="mode === 'product' && product">
       <div class="max-w-4xl mx-auto">
         <NuxtLink to="/products" class="text-primary hover:underline text-sm mb-4 inline-block">← Back to Products</NuxtLink>
+        <div v-if="category" class="mb-2 text-sm text-gray-500">
+          <NuxtLink :to="`/products/${category.slug}`" class="hover:underline">{{ category.label }}</NuxtLink>
+        </div>
         <h1 class="text-3xl font-bold mb-4">{{ product.title }}</h1>
         <img v-if="product.coverImage" :src="product.coverImage" :alt="product.title" class="w-full max-h-96 object-cover rounded-lg mb-6">
         <p class="text-gray-600 mb-6">{{ product.description }}</p>

@@ -50,7 +50,7 @@ export function resolveBlogComponent(template: string, mode: 'home' | 'category'
   return source[template] || source[fallback]
 }
 
-export function resolveProductComponent(template: string, mode: 'home' | 'category' | 'product', fallback = 'corporate-basic') {
+export function resolveProductComponent(template: string, mode: 'home' | 'category' | 'product', fallback?: string) {
   const source = mode === 'home' ? productHomeRegistry : mode === 'category' ? productCategoryRegistry : productDetailRegistry
-  return source[template] || source[fallback]
+  return source[template] || (fallback ? source[fallback] : undefined)
 }

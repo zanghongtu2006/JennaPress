@@ -155,6 +155,7 @@ export type Product = {
   author: string
   authorUrl: string
   category: string
+  categoryMeta?: BlogCategory
   tags: string[]
   downloadCount: number
   createdAt: string

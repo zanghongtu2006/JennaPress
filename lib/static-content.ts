@@ -74,6 +74,10 @@ function normalizePostSlug(slug: string) {
   return slug.replace(/^\//, '')
 }
 
+function normalizeProductSlug(slug: string) {
+  return slug.replace(/^\//, '')
+}
+
 function slugifyCategory(input: string) {
   const normalized = input.normalize('NFKC').trim().toLowerCase()
   const slug = normalized.replace(/[^\p{Letter}\p{Number}]+/gu, '-').replace(/^-+|-+$/g, '')
@@ -194,7 +198,7 @@ function parseRawMarkdown(raw: string) {
   return matter(raw)
 }
 
-function localeFromPath(filePath: string, collection: 'pages' | 'posts' | 'site'): SupportedLocale {
+function localeFromPath(filePath: string, collection: 'pages' | 'posts' | 'products' | 'site'): SupportedLocale {
   const normalized = filePath.replace(/\\/g, '/')
 
   if (collection === 'site') {
@@ -272,14 +276,8 @@ function getLocalizedModuleEntries(modules: RawModuleMap, collection: 'pages' | 
   return Object.entries(modules).filter(([filePath]) => localeFromPath(filePath, collection) === locale)
 }
 
-function localeFromPathForProducts(filePath: string): SupportedLocale {
-  const normalized = filePath.replace(/\\/g, '/')
-  const match = normalized.match(/\/products\/([a-z0-9-]+)\//i)
-  return match?.[1]?.toLowerCase() || DEFAULT_LOCALE
-}
-
 function getLocalizedProductEntries(modules: RawModuleMap, locale: SupportedLocale) {
-  return Object.entries(modules).filter(([filePath]) => localeFromPathForProducts(filePath) === locale)
+  return Object.entries(modules).filter(([filePath]) => localeFromPath(filePath, 'products') === locale)
 }
 
 function getPageMapForLocale(locale: SupportedLocale) {
@@ -303,12 +301,34 @@ function getPageMapForLocale(locale: SupportedLocale) {
 function getPostMapForLocale(locale: SupportedLocale) {
   const map = new Map<string, PostContent>()
 
-  // Only load posts that exist in the requested locale — no fallback to DEFAULT_LOCALE.
-  // If a post has no version in this locale, it does not appear here.
-  const sourceLocale = locale === DEFAULT_LOCALE ? DEFAULT_LOCALE : locale
-  for (const [, raw] of getLocalizedModuleEntries(postModules, 'posts', sourceLocale)) {
+  for (const [, raw] of getLocalizedModuleEntries(postModules, 'posts', DEFAULT_LOCALE)) {
     const post = readPostFile(raw)
     map.set(normalizePostSlug(post.slug), post)
+  }
+
+  if (locale !== DEFAULT_LOCALE) {
+    for (const [, raw] of getLocalizedModuleEntries(postModules, 'posts', locale)) {
+      const post = readPostFile(raw)
+      map.set(normalizePostSlug(post.slug), post)
+    }
+  }
+
+  return map
+}
+
+function getProductMapForLocale(locale: SupportedLocale) {
+  const map = new Map<string, Product>()
+
+  for (const [, raw] of getLocalizedProductEntries(productModules, DEFAULT_LOCALE)) {
+    const product = readProductFile(raw)
+    map.set(normalizeProductSlug(product.slug), product)
+  }
+
+  if (locale !== DEFAULT_LOCALE) {
+    for (const [, raw] of getLocalizedProductEntries(productModules, locale)) {
+      const product = readProductFile(raw)
+      map.set(normalizeProductSlug(product.slug), product)
+    }
   }
 
   return map
@@ -356,6 +376,38 @@ function toBlogPost(post: PostContent, locale: SupportedLocale = DEFAULT_LOCALE)
     ...post,
     category: categoryValue,
     categoryMeta,
+  }
+}
+
+function buildProductCategoryMeta(product: Product): BlogCategory {
+  const extra = product as Product & {
+    categoryKey?: string
+    categorySlug?: string
+    categoryLabel?: string
+    categoryDescription?: string
+    categoryListTitle?: string
+    categoryAccent?: string
+  }
+
+  const categoryValue = typeof product.category === 'string' && product.category.trim() ? product.category.trim() : 'General'
+  const label = typeof extra.categoryLabel === 'string' && extra.categoryLabel.trim() ? extra.categoryLabel.trim() : toCategoryLabel(categoryValue)
+  const slug = typeof extra.categorySlug === 'string' && extra.categorySlug.trim() ? slugifyCategory(extra.categorySlug) : slugifyCategory(categoryValue)
+
+  return {
+    key: typeof extra.categoryKey === 'string' && extra.categoryKey.trim() ? extra.categoryKey.trim() : categoryValue,
+    slug,
+    label,
+    description: typeof extra.categoryDescription === 'string' && extra.categoryDescription.trim() ? extra.categoryDescription.trim() : label,
+    accent: isBlogCategoryAccent(extra.categoryAccent) ? extra.categoryAccent : 'default',
+    listTitle: typeof extra.categoryListTitle === 'string' && extra.categoryListTitle.trim() ? extra.categoryListTitle.trim() : label,
+  }
+}
+
+function toProductRecord(product: Product): Product {
+  return {
+    ...product,
+    category: typeof product.category === 'string' && product.category.trim() ? product.category.trim() : 'General',
+    categoryMeta: buildProductCategoryMeta(product),
   }
 }
 
@@ -434,24 +486,12 @@ function buildLocalePayload(locale: SupportedLocale): LocalePayload {
   }
 
   // Build products data
-  const productEntries = Array.from(getLocalizedProductEntries(productModules, locale).map(([filePath, raw]) => {
-    const product = readProductFile(raw)
-    return product
-  }))
+  const productEntries = Array.from(getProductMapForLocale(locale).values())
+    .map(product => toProductRecord(product))
 
   const productCategories = new Map<string, BlogCategory>()
   for (const product of productEntries) {
-    const categoryValue = typeof product.category === 'string' && product.category.trim() ? product.category.trim() : 'General'
-    const slug = slugifyCategory(categoryValue)
-    const label = toCategoryLabel(categoryValue)
-    productCategories.set(slug, {
-      key: categoryValue,
-      slug,
-      label,
-      description: label,
-      accent: 'default',
-      listTitle: label,
-    })
+    productCategories.set(product.categoryMeta.slug, product.categoryMeta)
   }
   const sortedProductCategories = Array.from(productCategories.values()).sort((a, b) => a.label.localeCompare(b.label))
 
@@ -459,13 +499,13 @@ function buildLocalePayload(locale: SupportedLocale): LocalePayload {
   for (const category of sortedProductCategories) {
     productCategoryMap[category.slug] = {
       category,
-      products: productEntries.filter(product => slugifyCategory(product.category) === category.slug),
+      products: productEntries.filter(product => product.categoryMeta.slug === category.slug),
     }
   }
 
   const productMap: Record<string, Product> = {}
   for (const product of productEntries) {
-    const key = `${slugifyCategory(product.category)}/${product.slug.replace(/^\//, '')}`
+    const key = `${product.categoryMeta.slug}/${normalizeProductSlug(product.slug)}`
     productMap[key] = product
   }
 

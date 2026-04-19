@@ -44,36 +44,81 @@ function slugifyCategory(input: string) {
   return input.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 }
 
+function resolveNormalizedCategorySlug(data: Record<string, unknown>, collection: 'posts' | 'products') {
+  if (collection === 'products') {
+    const categorySlug = typeof data?.categorySlug === 'string' ? data.categorySlug.trim() : ''
+    if (categorySlug) {
+      return slugifyCategory(categorySlug)
+    }
+  }
+
+  const category = typeof data?.category === 'string' ? data.category.trim() : ''
+  return category ? slugifyCategory(category) : 'general'
+}
+
 function listMarkdownFiles(dir: string) {
   if (!fs.existsSync(dir)) {
     return []
   }
-  return fs.readdirSync(dir).filter((file) => file.endsWith('.md'))
+
+  const files: string[] = []
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const absolutePath = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...listMarkdownFiles(absolutePath))
+      continue
+    }
+
+    if (entry.isFile() && entry.name.endsWith('.md')) {
+      files.push(absolutePath)
+    }
+  }
+
+  return files
 }
 
 const SUPPORTED_LOCALES = LOCALES.map((item) => item.code)
 const SECONDARY_LOCALES = SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE)
 const localePattern = SECONDARY_LOCALES.length ? SECONDARY_LOCALES.map((locale) => locale.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') : '__no_locale__'
 
-function readPageRoutesForDir(dir: string) {
-  const files = listMarkdownFiles(dir)
-  return files
-    .map((file) => {
-      const data = readFrontMatter(path.join(dir, file))
-      const slug = data?.slug ? String(data.slug) : ''
-      return slug === '/' ? '/' : `/${slug.replace(/^\//, '')}`
-    })
-    .filter(Boolean)
+function getCollectionLocaleFromPath(filePath: string, collection: 'pages' | 'posts' | 'products') {
+  const normalized = filePath.replace(/\\/g, '/')
+  const match = normalized.match(new RegExp(`/${collection}/([a-z0-9-]+)/`, 'i'))
+  const candidate = match?.[1]?.toLowerCase()
+  return candidate && SUPPORTED_LOCALES.includes(candidate) ? candidate : DEFAULT_LOCALE
+}
+
+function readCollectionEntries<T>(collection: 'pages' | 'posts' | 'products', readEntry: (filePath: string) => T | null) {
+  const dir = path.resolve(process.cwd(), `content/${collection}`)
+  const entries = new Map<string, Map<string, T>>()
+
+  for (const locale of SUPPORTED_LOCALES) {
+    entries.set(locale, new Map())
+  }
+
+  for (const filePath of listMarkdownFiles(dir)) {
+    const locale = getCollectionLocaleFromPath(filePath, collection)
+    const entry = readEntry(filePath)
+    if (!entry) continue
+    entries.get(locale)?.set(filePath, entry)
+  }
+
+  return entries
 }
 
 function readPageRoutes() {
-  const pagesDir = path.resolve(process.cwd(), 'content/pages')
-  const defaultRoutes = readPageRoutesForDir(pagesDir)
+  const entriesByLocale = readCollectionEntries('pages', (filePath) => {
+    const data = readFrontMatter(filePath)
+    const slug = data?.slug ? String(data.slug) : ''
+    if (!slug) return null
+    return slug === '/' ? '/' : `/${slug.replace(/^\//, '')}`
+  })
+
+  const defaultRoutes = Array.from(entriesByLocale.get(DEFAULT_LOCALE)?.values() ?? [])
   const routes = new Set<string>(defaultRoutes.length ? defaultRoutes : ['/'])
 
   for (const locale of SECONDARY_LOCALES) {
-    const localizedDir = path.join(pagesDir, locale)
-    const localizedRoutes = new Set(readPageRoutesForDir(localizedDir))
+    const localizedRoutes = new Set(entriesByLocale.get(locale)?.values() ?? [])
 
     for (const route of defaultRoutes) {
       routes.add(route === '/' ? `/${locale}` : `/${locale}${route}`)
@@ -87,22 +132,37 @@ function readPageRoutes() {
   return Array.from(routes)
 }
 
-function readPostEntriesForDir(dir: string) {
-  const files = listMarkdownFiles(dir)
-  return files
-    .map((file) => {
-      const data = readFrontMatter(path.join(dir, file))
-      const slug = data?.slug ? String(data.slug).replace(/^\//, '') : ''
-      const category = data?.category ? slugifyCategory(String(data.category)) : 'general'
-      if (!slug) return null
-      return { slug, category }
-    })
-    .filter(Boolean) as Array<{ slug: string, category: string }>
+function readLocalizedContentEntries(collection: 'posts' | 'products') {
+  const entriesByLocale = readCollectionEntries(collection, (filePath) => {
+    const data = readFrontMatter(filePath)
+    const slug = data?.slug ? String(data.slug).replace(/^\//, '') : ''
+    const category = resolveNormalizedCategorySlug(data, collection)
+    if (!slug) return null
+    return { slug, category }
+  })
+
+  const defaultEntries = new Map<string, { slug: string, category: string }>()
+  for (const entry of entriesByLocale.get(DEFAULT_LOCALE)?.values() ?? []) {
+    defaultEntries.set(entry.slug, entry)
+  }
+
+  const mergedByLocale = new Map<string, Map<string, { slug: string, category: string }>>()
+  mergedByLocale.set(DEFAULT_LOCALE, defaultEntries)
+
+  for (const locale of SECONDARY_LOCALES) {
+    const merged = new Map(defaultEntries)
+    for (const entry of entriesByLocale.get(locale)?.values() ?? []) {
+      merged.set(entry.slug, entry)
+    }
+    mergedByLocale.set(locale, merged)
+  }
+
+  return mergedByLocale
 }
 
 function readBlogRoutes() {
-  const postsDir = path.resolve(process.cwd(), 'content/posts')
-  const defaultEntries = readPostEntriesForDir(postsDir)
+  const entriesByLocale = readLocalizedContentEntries('posts')
+  const defaultEntries = Array.from(entriesByLocale.get(DEFAULT_LOCALE)?.values() ?? [])
   const routes = new Set<string>(['/blog'])
 
   for (const entry of defaultEntries) {
@@ -111,19 +171,8 @@ function readBlogRoutes() {
   }
 
   for (const locale of SECONDARY_LOCALES) {
-    const localizedDir = path.join(postsDir, locale)
-    const merged = new Map<string, { slug: string, category: string }>()
-
-    for (const entry of defaultEntries) {
-      merged.set(entry.slug, entry)
-    }
-
-    for (const entry of readPostEntriesForDir(localizedDir)) {
-      merged.set(entry.slug, entry)
-    }
-
     routes.add(`/${locale}/blog`)
-    for (const entry of merged.values()) {
+    for (const entry of entriesByLocale.get(locale)?.values() ?? []) {
       routes.add(`/${locale}/blog/${entry.category}`)
       routes.add(`/${locale}/blog/${entry.category}/${entry.slug}`)
     }
@@ -132,22 +181,9 @@ function readBlogRoutes() {
   return Array.from(routes)
 }
 
-function readProductEntriesForDir(dir: string) {
-  const files = listMarkdownFiles(dir)
-  return files
-    .map((file) => {
-      const data = readFrontMatter(path.join(dir, file))
-      const slug = data?.slug ? String(data.slug).replace(/^\//, '') : ''
-      const category = data?.category ? slugifyCategory(String(data.category)) : 'general'
-      if (!slug) return null
-      return { slug, category }
-    })
-    .filter(Boolean) as Array<{ slug: string, category: string }>
-}
-
 function readProductRoutes() {
-  const productsDir = path.resolve(process.cwd(), 'content/products')
-  const defaultEntries = readProductEntriesForDir(productsDir)
+  const entriesByLocale = readLocalizedContentEntries('products')
+  const defaultEntries = Array.from(entriesByLocale.get(DEFAULT_LOCALE)?.values() ?? [])
   const routes = new Set<string>(['/products'])
 
   for (const entry of defaultEntries) {
@@ -156,19 +192,8 @@ function readProductRoutes() {
   }
 
   for (const locale of SECONDARY_LOCALES) {
-    const localizedDir = path.join(productsDir, locale)
-    const merged = new Map<string, { slug: string, category: string }>()
-
-    for (const entry of defaultEntries) {
-      merged.set(entry.slug, entry)
-    }
-
-    for (const entry of readProductEntriesForDir(localizedDir)) {
-      merged.set(entry.slug, entry)
-    }
-
     routes.add(`/${locale}/products`)
-    for (const entry of merged.values()) {
+    for (const entry of entriesByLocale.get(locale)?.values() ?? []) {
       routes.add(`/${locale}/products/${entry.category}`)
       routes.add(`/${locale}/products/${entry.category}/${entry.slug}`)
     }
