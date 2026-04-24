@@ -2,7 +2,7 @@
 name: Jenna Press
 logoText: JP
 siteUrl: https://www.jennapress.com
-defaultTemplate: product-showcase
+defaultTemplate: saas-landing
 defaultTheme: dark
 themes:
   - dark

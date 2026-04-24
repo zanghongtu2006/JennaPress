@@ -163,3 +163,25 @@ export type Product = {
   updatedAt: string
   blocks?: Block[]
 }
+
+export type SearchCollection = 'pages' | 'blog' | 'products'
+
+export type SearchIndexEntry = {
+  id: string
+  collection: SearchCollection
+  locale: string
+  title: string
+  description: string
+  url: string
+  text: string
+  category?: string
+  categoryLabel?: string
+  tags?: string[]
+  publishedAt?: string
+  updatedAt?: string
+}
+
+export type SearchIndexPayload = {
+  locale: string
+  entries: SearchIndexEntry[]
+}

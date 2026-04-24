@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BlogCategory, BlogPostSummary } from '~/types'
+import { fetchBlogCategories, fetchBlogPosts } from '~/composables/useContentData'
 import { DEFAULT_LOCALE, isSecondaryLocale } from '~/lib/i18n'
-import { getStaticBlogCategories, getStaticBlogPosts } from '~/lib/static-content'
 import TemplateFrameRenderer from '~/components/layouts/TemplateFrameRenderer.vue'
 import TemplateBlogRenderer from '~/components/layouts/TemplateBlogRenderer.vue'
 
@@ -19,12 +19,12 @@ const postsKey = computed(() => `blog:${locale.value}:posts`)
 
 const { data: categoriesData, error: categoriesError } = await useAsyncData<BlogCategory[]>(
   categoriesKey,
-  () => Promise.resolve(getStaticBlogCategories(locale.value)),
+  () => fetchBlogCategories(locale.value),
   { watch: [locale] },
 )
 const { data: postsData, error: postsError } = await useAsyncData<BlogPostSummary[]>(
   postsKey,
-  () => Promise.resolve(getStaticBlogPosts(locale.value)),
+  () => fetchBlogPosts(locale.value),
   { watch: [locale] },
 )
 

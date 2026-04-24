@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PageContent } from '~/types'
+import { fetchPageContent } from '~/composables/useContentData'
 import { DEFAULT_LOCALE, isSecondaryLocale } from '~/lib/i18n'
-import { getStaticPage } from '~/lib/static-content'
 import TemplateRenderer from '~/components/layouts/TemplateRenderer.vue'
 import TemplateFrameRenderer from '~/components/layouts/TemplateFrameRenderer.vue'
 
@@ -17,7 +17,7 @@ const site = computed(() => siteData.value)
 const pageKey = computed(() => `page:${locale.value}:/`)
 const { data: pageData, error: pageError } = await useAsyncData<PageContent | null>(
   pageKey,
-  () => Promise.resolve(getStaticPage('/', locale.value)),
+  () => fetchPageContent('/', locale.value),
   { watch: [locale] },
 )
 

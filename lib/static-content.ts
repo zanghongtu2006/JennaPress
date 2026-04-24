@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 import { validatePageContent, validatePostContent, validateProduct, validateSiteConfig } from './schema'
@@ -14,6 +16,8 @@ import type {
   PostContent,
   Product,
   RichTextBlock,
+  SearchIndexPayload,
+  SearchIndexEntry,
   SiteConfig,
 } from '~/types'
 
@@ -38,29 +42,58 @@ type LocalePayload = {
   }
 }
 
-const pageModules = import.meta.glob('../content/pages/**/*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as RawModuleMap
+function listMarkdownFiles(dir: string) {
+  if (!fs.existsSync(dir)) {
+    return []
+  }
 
-const postModules = import.meta.glob('../content/posts/**/*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as RawModuleMap
+  const files: string[] = []
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const absolutePath = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...listMarkdownFiles(absolutePath))
+      continue
+    }
 
-const siteModules = import.meta.glob('../content/site*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as RawModuleMap
+    if (entry.isFile() && entry.name.endsWith('.md')) {
+      files.push(absolutePath)
+    }
+  }
 
-const productModules = import.meta.glob('../content/products/**/*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as RawModuleMap
+  return files
+}
+
+function moduleKeyFromPath(filePath: string) {
+  return `../${path.relative(process.cwd(), filePath).replace(/\\/g, '/')}`
+}
+
+function readCollectionModules(collection: 'pages' | 'posts' | 'products'): RawModuleMap {
+  const dir = path.resolve(process.cwd(), 'content', collection)
+  return Object.fromEntries(
+    listMarkdownFiles(dir).map(filePath => [moduleKeyFromPath(filePath), fs.readFileSync(filePath, 'utf-8')]),
+  )
+}
+
+function readSiteModules(): RawModuleMap {
+  const dir = path.resolve(process.cwd(), 'content')
+  if (!fs.existsSync(dir)) {
+    return {}
+  }
+
+  return Object.fromEntries(
+    fs.readdirSync(dir, { withFileTypes: true })
+      .filter(entry => entry.isFile() && /^site(?:\.[a-z0-9-]+)?\.md$/i.test(entry.name))
+      .map((entry) => {
+        const filePath = path.join(dir, entry.name)
+        return [moduleKeyFromPath(filePath), fs.readFileSync(filePath, 'utf-8')]
+      }),
+  )
+}
+
+const pageModules = readCollectionModules('pages')
+const postModules = readCollectionModules('posts')
+const siteModules = readSiteModules()
+const productModules = readCollectionModules('products')
 
 function resolveLocale(locale?: string | null): SupportedLocale {
   return isSupportedLocale(locale) ? locale : DEFAULT_LOCALE
@@ -411,6 +444,116 @@ function toProductRecord(product: Product): Product {
   }
 }
 
+function textFromHtml(html: string | undefined) {
+  return typeof html === 'string'
+    ? html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+    : ''
+}
+
+function textFromBlock(block: Block | RichTextBlock | CtaBannerBlock) {
+  if (block.type === 'hero') {
+    return [block.kicker, block.title, block.description, block.panelTitle, ...(block.panelLines || [])].filter(Boolean).join(' ')
+  }
+
+  if (block.type === 'feature-grid') {
+    return [block.title, block.description, ...block.items.flatMap(item => [item.title, item.description])].filter(Boolean).join(' ')
+  }
+
+  if (block.type === 'rich-text') {
+    return [block.title, textFromHtml(block.html)].filter(Boolean).join(' ')
+  }
+
+  if (block.type === 'cta-banner') {
+    return [block.title, block.description, block.action.label].filter(Boolean).join(' ')
+  }
+
+  if (block.type === 'stats') {
+    return [block.title, block.description, ...block.items.flatMap(item => [item.value, item.label, item.note])].filter(Boolean).join(' ')
+  }
+
+  return ''
+}
+
+function compactText(parts: Array<string | undefined>) {
+  return parts.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim()
+}
+
+function buildSearchIndex(locale: SupportedLocale): SearchIndexPayload {
+  const payload = getLocalePayload(locale)
+  const entries: SearchIndexEntry[] = []
+
+  for (const page of Object.values(payload.pages)) {
+    entries.push({
+      id: `pages:${page.slug}`,
+      collection: 'pages',
+      locale,
+      title: page.title,
+      description: page.summary || page.seo.description,
+      url: prefixPathForLocale(page.slug, locale),
+      text: compactText([
+        page.title,
+        page.summary,
+        page.seo.title,
+        page.seo.description,
+        ...page.blocks.map(textFromBlock),
+      ]),
+    })
+  }
+
+  for (const post of payload.blog.posts) {
+    entries.push({
+      id: `blog:${post.categoryMeta.slug}/${post.slug}`,
+      collection: 'blog',
+      locale,
+      title: post.title,
+      description: post.summary,
+      url: prefixPathForLocale(`/blog/${post.categoryMeta.slug}/${post.slug}`, locale),
+      text: compactText([
+        post.title,
+        post.summary,
+        post.seo.title,
+        post.seo.description,
+        post.category,
+        post.categoryMeta.label,
+        ...(post.tags || []),
+      ]),
+      category: post.categoryMeta.slug,
+      categoryLabel: post.categoryMeta.label,
+      tags: post.tags || [],
+      publishedAt: post.publishedAt,
+      updatedAt: post.updatedAt,
+    })
+  }
+
+  for (const product of payload.products.products) {
+    const categorySlug = product.categoryMeta?.slug || slugifyCategory(product.category)
+    entries.push({
+      id: `products:${categorySlug}/${product.slug}`,
+      collection: 'products',
+      locale,
+      title: product.title,
+      description: product.description,
+      url: prefixPathForLocale(`/products/${categorySlug}/${product.slug}`, locale),
+      text: compactText([
+        product.title,
+        product.description,
+        product.seo?.title,
+        product.seo?.description,
+        product.category,
+        product.categoryMeta?.label,
+        ...(product.tags || []),
+        ...(product.blocks || []).map(textFromBlock),
+      ]),
+      category: categorySlug,
+      categoryLabel: product.categoryMeta?.label,
+      tags: product.tags || [],
+      updatedAt: product.updatedAt,
+    })
+  }
+
+  return { locale, entries }
+}
+
 
 function discoverNav(locale: SupportedLocale, pages: Record<string, PageContent>, posts: BlogPostSummary[], products: Product[]): NavItem[] {
   const nav: NavItem[] = []
@@ -590,4 +733,8 @@ export function getStaticProductCategoryPayload(category: string, locale?: strin
 export function getStaticProduct(category: string, slug: string, locale?: string | null): Product | null {
   const key = `${category}/${slug.replace(/^\//, '')}`
   return getLocalePayload(locale).products.productMap[key] ?? null
+}
+
+export function getStaticSearchIndex(locale?: string | null): SearchIndexPayload {
+  return buildSearchIndex(resolveLocale(locale))
 }

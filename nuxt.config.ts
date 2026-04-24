@@ -132,6 +132,29 @@ function readPageRoutes() {
   return Array.from(routes)
 }
 
+function readLocalizedPageSlugs() {
+  const entriesByLocale = readCollectionEntries('pages', (filePath) => {
+    const data = readFrontMatter(filePath)
+    const slug = data?.slug ? String(data.slug) : ''
+    if (!slug) return null
+    return slug === '/' ? '/' : `/${slug.replace(/^\//, '')}`
+  })
+
+  const defaultSlugs = new Set(entriesByLocale.get(DEFAULT_LOCALE)?.values() ?? ['/'])
+  const mergedByLocale = new Map<string, Set<string>>()
+  mergedByLocale.set(DEFAULT_LOCALE, defaultSlugs)
+
+  for (const locale of SECONDARY_LOCALES) {
+    const merged = new Set(defaultSlugs)
+    for (const slug of entriesByLocale.get(locale)?.values() ?? []) {
+      merged.add(slug)
+    }
+    mergedByLocale.set(locale, merged)
+  }
+
+  return mergedByLocale
+}
+
 function readLocalizedContentEntries(collection: 'posts' | 'products') {
   const entriesByLocale = readCollectionEntries(collection, (filePath) => {
     const data = readFrontMatter(filePath)
@@ -200,6 +223,59 @@ function readProductRoutes() {
   }
 
   return Array.from(routes)
+}
+
+function encodeRouteSegment(value: string) {
+  return encodeURIComponent(value)
+}
+
+function pageSlugToApiPath(slug: string) {
+  if (slug === '/') {
+    return '_root'
+  }
+
+  return slug.replace(/^\//, '').split('/').filter(Boolean).map(encodeRouteSegment).join('/')
+}
+
+function readContentApiRoutes() {
+  const routes: string[] = []
+  const pageSlugsByLocale = readLocalizedPageSlugs()
+  const blogEntriesByLocale = readLocalizedContentEntries('posts')
+  const productEntriesByLocale = readLocalizedContentEntries('products')
+
+  for (const locale of SUPPORTED_LOCALES) {
+    routes.push(`/api/content/${locale}/site`)
+    routes.push(`/api/content/${locale}/search-index`)
+    routes.push(`/api/search/${locale}.json`)
+
+    for (const slug of pageSlugsByLocale.get(locale)?.values() ?? []) {
+      routes.push(`/api/content/${locale}/page/${pageSlugToApiPath(slug)}`)
+    }
+
+    routes.push(`/api/content/${locale}/blog/categories`)
+    routes.push(`/api/content/${locale}/blog/posts`)
+    const blogCategories = new Set<string>()
+    for (const entry of blogEntriesByLocale.get(locale)?.values() ?? []) {
+      blogCategories.add(entry.category)
+      routes.push(`/api/content/${locale}/blog/post/${encodeRouteSegment(entry.category)}/${encodeRouteSegment(entry.slug)}`)
+    }
+    for (const category of blogCategories) {
+      routes.push(`/api/content/${locale}/blog/category/${encodeRouteSegment(category)}`)
+    }
+
+    routes.push(`/api/content/${locale}/products/categories`)
+    routes.push(`/api/content/${locale}/products/items`)
+    const productCategories = new Set<string>()
+    for (const entry of productEntriesByLocale.get(locale)?.values() ?? []) {
+      productCategories.add(entry.category)
+      routes.push(`/api/content/${locale}/products/item/${encodeRouteSegment(entry.category)}/${encodeRouteSegment(entry.slug)}`)
+    }
+    for (const category of productCategories) {
+      routes.push(`/api/content/${locale}/products/category/${encodeRouteSegment(category)}`)
+    }
+  }
+
+  return routes
 }
 
 function readDefaultTheme() {
@@ -348,7 +424,7 @@ export default defineNuxtConfig({
     preset: 'static',
     prerender: {
       autoSubfolderIndex: true,
-      routes: [...readPageRoutes(), ...readBlogRoutes(), ...readProductRoutes()]
+      routes: [...readPageRoutes(), ...readBlogRoutes(), ...readProductRoutes(), ...readContentApiRoutes()]
     }
   },
   runtimeConfig: {

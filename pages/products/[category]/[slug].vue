@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Product } from '~/types'
+import { fetchProductContent } from '~/composables/useContentData'
 import { DEFAULT_LOCALE, isSecondaryLocale } from '~/lib/i18n'
-import { getStaticProduct } from '~/lib/static-content'
 import TemplateFrameRenderer from '~/components/layouts/TemplateFrameRenderer.vue'
 import TemplateProductRenderer from '~/components/layouts/TemplateProductRenderer.vue'
 
@@ -19,7 +19,7 @@ const site = computed(() => siteData.value)
 const productKey = computed(() => `products:${locale.value}:product:${category.value}:${slug.value}`)
 const { data: productData, error: productError } = await useAsyncData<Product | null>(
   productKey,
-  () => Promise.resolve(getStaticProduct(category.value, slug.value, locale.value)),
+  () => fetchProductContent(category.value, slug.value, locale.value),
   { watch: [locale, category, slug] },
 )
 
