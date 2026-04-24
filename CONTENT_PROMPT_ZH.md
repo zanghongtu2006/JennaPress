@@ -1,60 +1,91 @@
-# 内容创作提示词（中文）
+# JennaPress 内容维护准则（中文）
 
-使用此提示词来让 AI 为 JennaPress CMS 站点**创建、更新或管理内容**。
+本准则用于让 AI 维护 JennaPress 站点内容。JennaPress 是一个 Nuxt 静态站点框架，站点的页面、博客、商品引流内容和静态资源应通过 `content/`、`public/`、`templates/` 三个目录维护。
 
-JennaPress 是一个静态优先、多语言的 CMS，所有内容都存储在 Markdown 文件中。本提示词定义了内容文件的确切结构、多语言内容的运作方式、主题配置方法，以及内容作者必须严格禁止的操作。
+本文件只定义内容维护任务。若任务是设计或开发模板，请使用 `TEMPLATE_PROMPT_ZH.md`。
 
 ---
 
-## 内容文件位置
+## 最高优先级边界
 
-```
+AI 在内容维护任务中只允许修改：
+
+- `content/**`
+- `public/template-assets/**`
+
+AI 在内容维护任务中禁止修改：
+
+- `templates/**`
+- `components/**`
+- `pages/**`
+- `composables/**`
+- `lib/**`
+- `types/**`
+- `assets/**`
+- `nuxt.config.ts`
+- `package.json`
+- `package-lock.json`
+- `.github/**`
+- 任何框架层配置、路由、类型、共享组件或构建逻辑
+
+如果用户要求修改上述禁止目录，AI 必须停止并说明：该请求超出内容维护边界，应改用模板维护任务或框架开发任务。
+
+---
+
+## 内容目录结构
+
+```text
 content/
-├── site.md              ← 站点全局配置（名称、导航、主题等）
-├── l18n.ts              ← 语言定义（语言代码和标签）
-├── pages/
-│   ├── index.md         ← 首页内容
-│   ├── about.md         ← 关于页面
-│   ├── principles.md    ← 原则页面
-│   └── <locale>/
-│       ├── index.md     ← 本地化首页
-│       ├── about.md     ← 本地化关于页
-│       └── ...
-└── posts/
-    ├── release-notes-v1-0-0.md    ← 英文文章
-    └── <locale>/
-        ├── release-notes-v1-0-0.md   ← 本地化文章（相同 slug）
-        └── ...
+  site.md                 默认语言站点配置
+  site.<locale>.md        非默认语言站点配置
+  l18n.ts                 语言列表和默认语言
+  pages/
+    index.md              首页
+    about.md              普通页面
+    <locale>/
+      index.md            本地化首页
+  posts/
+    my-post.md            默认语言博客文章
+    <locale>/
+      my-post.md          本地化博客文章
+  products/
+    product-slug.md       默认语言商品引流内容
+    <locale>/
+      product-slug.md     本地化商品内容，可选
 ```
 
-**绝对规则：只编辑 `content/` 下的文件。严禁触碰 `templates/`、`components/`、`pages/`、`composables/`、`lib/`、`types/` 或 `assets/`。**
+```text
+public/
+  template-assets/
+    <template-name>/
+      image.svg
+      product-cover.webp
+      video.mp4
+```
 
 ---
 
-## `content/site.md` — 站点配置
+## 站点配置规则
 
-这不是内容页面，而是站点配置文件。编辑它来更改站点标识、导航、主题和默认设置。
+`content/site.md` 和 `content/site.<locale>.md` 控制站点名称、导航、模板、主题和页脚。
 
 ```yaml
 ---
-name: 我的网站
-logoText: MW
+name: Example Store
+logoText: ES
 siteUrl: https://www.example.com
-defaultTemplate: corporate-basic
-defaultTheme: dark
+defaultTemplate: product-showcase
+defaultTheme: light
 themes:
-  - dark
   - light
-  - pink
-tagline: 站点标语
+  - night
+tagline: Curated products for faster launches.
 nav:
-  - label: 首页
-    to: /
-  - label: 关于
-    to: /about
-  - label: 博客
+  - label: Products
+    to: /products
+  - label: Blog
     to: /blog
-footerText: 所有页面显示的页脚文字。
+footerText: Static product discovery, external checkout.
 contactEmail: hello@example.com
 socialLinks:
   - label: GitHub
@@ -62,331 +93,263 @@ socialLinks:
 ---
 ```
 
-**可用字段：**
+严格规则：
 
-| 字段 | 必填 | 说明 |
-|---|---|---|
-| `name` | 是 | 站点显示名称（用于 HeaderBar、FooterBar、SEO） |
-| `logoText` | 是 | 短 Logo 文字（如 "JP"、"示例"） |
-| `siteUrl` | 是 | 生产站点完整 URL（用于规范 URL 和 sitemap） |
-| `defaultTemplate` | 是 | 使用哪个模板（必须匹配 `templates/` 下的目录名） |
-| `defaultTheme` | 是 | 默认加载哪个主题（必须与模板 CSS 中的 `[data-theme]` 匹配） |
-| `themes` | 是 | 可用主题列表（用户可在这些之间切换） |
-| `tagline` | 否 | 站点标语 |
-| `nav` | 是 | 导航链接。`to` 必须是有效路由（根路径用 `/`，页面用 `/about`，博客用 `/blog`） |
-| `footerText` | 是 | 页脚标语文字 |
-| `contactEmail` | 否 | 页脚显示的联系邮箱 |
-| `socialLinks` | 否 | 页脚社交链接列表 `{label, to}` |
-
-**导航规则：**
-- 每个 `to` 路径必须是有效路由。JennaPress 路由：`/`、`/about`、`/principles`、`/blog`、`/blog/:category`、`/blog/:category/:slug`
-- 添加任意路由（如 `/pricing`）前必须先创建 `content/pages/pricing.md`
-- **禁止**在 nav 的 `to` 值前加语言前缀 — 路由系统会自动处理
+- `defaultTemplate` 必须等于 `templates/<template-name>/` 的目录名。
+- 内容任务可以切换 `defaultTemplate`，但不能修改模板代码。
+- `defaultTheme` 必须在 `themes` 数组中。
+- `nav.to` 只能指向已存在的静态路由，例如 `/`、`/about`、`/blog`、`/products`、`/products/<category>`。
+- 默认语言不要加语言前缀。
+- 非默认语言的 `site.<locale>.md` 中，导航可以写本地化路径，例如 `/zh/products`，但要保持和实际路由一致。
+- 如果新增商品站，至少在 nav 中加入 `/products`。
 
 ---
 
-## `content/l18n.ts` — 语言定义
+## 多语言规则
 
-此文件定义站点支持哪些语言。编辑它来添加或移除语言。
+`content/l18n.ts` 只允许在内容维护任务中修改语言列表，不允许修改文件结构之外的 TypeScript 逻辑。
 
 ```ts
-export type LocaleConfig = {
-  code: string
-  label: string
-  isDefault?: boolean
-}
-
-export const locales: LocaleConfig[] = [
+export const locales = [
   { code: 'en', label: 'English', isDefault: true },
-  { code: 'de', label: 'Deutsch' },
-  { code: 'el', label: 'Ελληνικά' },
-  { code: 'es', label: 'Español' },
   { code: 'zh', label: '中文' },
 ]
 ```
 
-**规则：**
-- 必须恰好有一个语言设置 `isDefault: true` — 这是回退语言
-- 默认语言**没有** URL 前缀（`/` 而不是 `/en/`）
-- 其他语言都有 URL 前缀（`/de/`、`/zh/` 等）
-- 添加新语言：加入此数组 + 在 `content/pages/` 和 `content/posts/` 下创建对应语言的子目录
-- 移除语言：从此数组删除 + 同时删除 `content/pages/` 和 `content/posts/` 下对应的语言子目录
+严格规则：
+
+- 必须且只能有一个 `isDefault: true`。
+- 默认语言没有 URL 前缀。
+- 非默认语言使用 `/<locale>/` 前缀。
+- 本地化页面、文章、商品应使用相同 `slug`。
+- 如果某个本地化文件缺失，框架会 fallback 到默认语言内容。
 
 ---
 
-## 页面内容（`content/pages/`）
+## Page 内容规则
 
-### 英文页面（默认语言）
+页面文件位于 `content/pages/`。
 
 ```yaml
 ---
-slug: /
-title: 首页
-summary: 一句话描述，用于 SEO 和社交分享。
+slug: /about
+title: About
+summary: Short page summary.
 seo:
-  title: 首页 | 站点名称
-  description: SEO 完整 meta 描述。
-  canonical: https://www.example.com/
-bodyTitle: 欢迎来到我们的网站
-bodyBlocks:
+  title: About | Example Store
+  description: SEO description.
+  canonical: https://www.example.com/about/
+blocks:
   - type: hero
-    kicker: 公司名称
-    title: 主标题
-    description: 副标题描述您的价值主张。
+    kicker: About
+    title: A focused static site
+    description: Clear copy for a static-first site.
     primaryAction:
-      label: 立即开始
-      to: /about
-    secondaryAction:
-      label: 阅读更多
-      to: /blog
+      label: View products
+      to: /products
   - type: feature-grid
-    title: 为什么选择我们
+    title: Why it works
     items:
-      - title: 特性一
-        description: 特性一描述。
-      - title: 特性二
-        description: 特性二描述。
-  - type: cta-banner
-    title: 准备好了吗？
-    description: 行动号召描述。
-    action:
-      label: 联系我们
-      to: /about
+      - title: Static
+        description: Fast hosting and predictable SEO.
 ---
-开头段落内容在这里。
+
+Markdown body can be added here. It becomes a rich text block.
 ```
 
-### 本地化页面
+页面支持的 block 类型：
 
-创建 `content/pages/<locale>/<slug>.md`。例如：`content/pages/de/index.md`、`content/pages/de/about.md`。
+- `hero`
+- `feature-grid`
+- `rich-text`
+- `cta-banner`
+- `stats`
+- `contact`
 
-**本地化规则：**
-- 使用与英文版本相同的 `slug` 字段值
-- 页面标题、摘要、正文和所有 block 文字必须翻译为目标语言
-- SEO `canonical` 应指向英文版本 URL
-- 如果某个页面不存在本地化版本，则显示英文版本（若语言前缀匹配支持的语言）
+禁止新增自定义 block 类型，因为 block 注册属于框架层。
 
 ---
 
-## 博客文章内容（`content/posts/`）
+## Blog 内容规则
 
-### 英文文章（默认语言）
+博客文章位于 `content/posts/`。
 
 ```yaml
 ---
-slug: my-first-post
-title: 我的第一篇博客文章
-summary: 博客文章摘要，用于文章卡片展示和 SEO。
-publishedAt: "2026-04-01"
-category: Project
+slug: product-selection-guide
+title: Product Selection Guide
+summary: A practical guide for comparing product resources.
+publishedAt: "2026-04-24"
+updatedAt: "2026-04-24"
+category: Usage
 tags:
-  - 标签一
-  - 标签二
+  - guide
+  - products
 author:
-  name: 作者名称
-  avatar: /template-assets/corporate-basic/avatar-placeholder.png
+  name: Example Store
 seo:
-  title: 我的第一篇博客文章 | 站点名称
-  description: 本文的 SEO meta 描述。
-  canonical: https://www.example.com/blog/project/my-first-post
-bodyTitle: 我的第一篇博客文章
+  title: Product Selection Guide | Example Store
+  description: Learn how to compare product resources.
+  canonical: https://www.example.com/blog/usage/product-selection-guide/
 bodyBlocks:
   - type: cta-banner
-    title: 有问题或反馈？
-    description: 告诉我们您的想法。
+    title: Browse products
     action:
-      label: 提交 Issue
-      to: https://github.com/example/issues
+      label: Open catalog
+      to: /products
 ---
-博客正文内容在这里，写普通 Markdown 即可。
 
-可以使用 **粗体**、*斜体* 和 [链接](https://example.com)。
-
-**禁止在博客正文 Markdown 中使用 ```javascript 代码块。**
-Nitro 预渲染阶段的 esbuild 无法解析 Markdown 中 JS 代码块里的 `return` 语句，
-会导致构建失败，错误信息为："Expected ; but found undefined"。
-请使用普通段落或 ```bash 代码块代替。
+Write normal Markdown body here.
 ```
 
-### 本地化文章
+严格规则：
 
-创建 `content/posts/<locale>/<slug>.md`。例如：`content/posts/de/my-first-post.md`。
-
-与英文版本使用相同的 `slug`。翻译所有面向用户的字段。
-
-### category 字段
-
-`category` 字段决定文章属于哪个博客分类。它会被自动 slugified（空格→连字符，转小写）。
-
-有效分类：`Project`、`Usage`、`Case Study`、`Product Note`、`Event Promo` 等。
-
-slugified 后的分类名在模板的 `blog/blog.config.ts` 中匹配，以确定使用哪个博客模块组件来渲染。
-
-**重要：**如果模板没有为某个分类注册模块，则使用 `default` 兜底。
+- `publishedAt` 和 `updatedAt` 使用 `"YYYY-MM-DD"`。
+- `slug` 使用小写英文、数字和连字符。
+- `category` 会自动转换为 URL slug，例如 `Product Note` 变为 `product-note`。
+- 不要在 Markdown 正文中生成 `\`\`\`javascript` 代码块。需要代码示例时优先使用行内代码或 `\`\`\`bash`。
 
 ---
 
-## 页面可用的 Block 类型
+## Product 内容规则
 
-在页面内容文件（`content/pages/*.md`）的 `bodyBlocks` 数组中使用。
-
-### `hero`
+商品内容位于 `content/products/`。商品不能站内成交，只能引流到外部成交页面。
 
 ```yaml
-- type: hero
-  kicker: 标题上方可选的 kicker
-  title: 主 Hero 标题
-  description: 副标题文字。
-  primaryAction:
-    label: 主 CTA 按钮文字
-    to: /about        # 内部路径或完整 URL
-  secondaryAction:
-    label: 次要 CTA
-    to: /blog
-  panelTitle: 可选的右侧面板标题
-  panelLines:          # 右侧面板显示的行
-    - 第一行
-    - 第二行
+---
+slug: conversion-landing-kit
+title: Conversion Landing Kit
+description: A polished landing page kit for paid traffic and launch campaigns.
+seo:
+  title: Conversion Landing Kit | Example Store
+  description: A static-friendly landing page kit for product launches.
+  canonical: https://www.example.com/products/landing-kits/conversion-landing-kit/
+coverImage: /template-assets/product-showcase/conversion-landing-kit.svg
+previewImages:
+  - /template-assets/product-showcase/conversion-landing-kit.svg
+price: 49
+isFree: false
+downloadUrl: https://example.com/checkout/conversion-landing-kit
+author: Example Studio
+authorUrl: https://www.example.com
+category: Landing Kits
+categorySlug: landing-kits
+categoryLabel: Landing Kits
+categoryDescription: Ready-to-adapt product pages for lead capture and launch campaigns.
+categoryListTitle: Landing kits that can ship quickly
+categoryAccent: product-note
+tags:
+  - landing-page
+  - campaign
+downloadCount: 2840
+createdAt: "2026-04-01"
+updatedAt: "2026-04-18"
+blocks:
+  - type: feature-grid
+    title: What is included
+    items:
+      - title: Hero sections
+        description: Conversion-focused above-the-fold sections.
+      - title: FAQ sections
+        description: Blocks for objections, proof, and comparison.
+  - type: cta-banner
+    title: Continue to seller
+    action:
+      label: Open seller page
+      to: https://example.com/checkout/conversion-landing-kit
+---
 ```
 
-### `feature-grid`
+必填字段：
 
-```yaml
-- type: feature-grid
-  title: 区块标题
-  description: 可选的区块描述。
-  items:
-    - title: 特性标题
-      description: 特性描述。
-    - title: 另一个特性
-      description: 另一个描述。
-```
+- `slug`
+- `title`
+- `description`
+- `coverImage`
+- `previewImages`
+- `price`
+- `isFree`
+- `downloadUrl`
+- `author`
+- `authorUrl`
+- `category`
+- `tags`
+- `downloadCount`
+- `createdAt`
+- `updatedAt`
 
-### `rich-text`
+推荐字段：
 
-```yaml
-- type: rich-text
-  title: 可选的区块标题
-  html: |
-    <p>这是<strong>富文本</strong>内容。</p>
-    <p>使用 <a href="/about">内部链接</a> 或
-       <a href="https://example.com">外部链接</a>。</p>
-```
+- `seo`
+- `categorySlug`
+- `categoryLabel`
+- `categoryDescription`
+- `categoryListTitle`
+- `categoryAccent`
+- `blocks`
 
-### `cta-banner`
+商品规则：
 
-```yaml
-- type: cta-banner
-  title: 行动号召标题
-  description: 补充描述文字。
-  action:
-    label: 按钮文字
-    to: /contact
-```
-
-### `stats`
-
-```yaml
-- type: stats
-  title: 我们的数字
-  description: 可选介绍文字。
-  items:
-    - value: "100+"
-      label: 客户
-      note: 全球范围
-    - value: "99.9%"
-      label: 运行时间
-```
-
-### `contact`
-
-```yaml
-- type: contact
-  title: 联系我们
-  description: 联系页面介绍。
-  email: hello@example.com
-  phone: "+49 30 123456"
-  address: 示例街道 1 号，10115 德国柏林
-```
+- `downloadUrl` 必须是外部成交、下载或详情页面。
+- 禁止写站内支付、购物车、订单、库存、登录等逻辑。
+- 商品图片必须放在 `public/template-assets/<template-name>/`。
+- 图片引用必须使用 `/template-assets/<template-name>/<file>`。
+- `categorySlug` 推荐显式填写，避免多语言 category 自动 slug 差异。
+- 多语言商品应保持相同 `slug` 和 `categorySlug`。
 
 ---
 
-## 主题配置
+## 静态资源规则
 
-主题**不是在内容文件中设置的**。主题的运作方式是：
-1. 在 `content/site.md` 的 `themes: []` 中声明可用主题
-2. 在活动模板的 `template.css` 中以 CSS 自定义属性实现
-3. 用户通过 ThemeSelect 组件选择主题（由模板提供 UI）
+AI 可以新增、替换或删除：
 
-**为站点添加新主题：**
-1. 编辑 `content/site.md` → 在 `themes` 数组中添加主题名
-2. 编辑模板的 `template.css` → 添加 `[data-theme="theme-name"]` 代码块并定义 CSS 变量
+- `public/template-assets/<template-name>/**`
 
-**更改默认主题：** 编辑 `content/site.md` → 修改 `defaultTheme` 字段。
+AI 不允许修改：
 
----
+- `public/favicon.svg`
+- `public/robots.txt`
+- 搜索引擎验证文件
+- `public/` 根目录下与站点验证、SEO 验证相关的文件
 
-## 多语言内容规则
+资源命名规则：
 
-### 添加新语言
-
-1. 在 `content/l18n.ts` 添加语言
-2. 创建 `content/pages/<locale>/` 目录，放入翻译后的页面
-3. 创建 `content/posts/<locale>/` 目录，放入翻译后的文章
-4. 每个本地化文件保持相同的 `slug` 字段值
-5. 更新本地化页面/文章 front matter 中的 `canonical` URL，指向英文版本
-
-### 翻译文章
-
-对于每个英文文章 `content/posts/<slug>.md`，创建：
-- `content/posts/de/<slug>.md`
-- `content/posts/zh/<slug>.md`
-- 依此类推
-
-所有本地化版本必须共享相同的 `slug` 字段值。只翻译内容（标题、摘要、正文、block 文字）。
-
-### 翻译页面
-
-对于每个英文页面 `content/pages/<slug>.md`，创建：
-- `content/pages/de/<slug>.md`
-- 依此类推
-
-规则与文章相同：共享 `slug`，翻译内容，`canonical` → 英文版本 URL。
+- 使用小写英文、数字、连字符。
+- 不使用空格。
+- 商品图建议使用 `.webp`、`.jpg`、`.png`、`.svg`。
+- 视频可使用 `.mp4`，但必须考虑静态托管体积。
 
 ---
 
-## SEO 字段
+## SEO 规则
 
-每个页面和文章都支持以下 SEO 字段：
+页面、博客、商品都应提供 `seo`：
 
 ```yaml
 seo:
-  title: 页面标题 | 站点名称    # 显示在 <title> 和社交卡片
-  description: Meta 描述。        # 显示在搜索结果和社交卡片
-  canonical: https://www.example.com/page   # 规范 URL（本地化内容永远指向英文版本）
+  title: Page Title | Site Name
+  description: Search-result-ready description.
+  canonical: https://www.example.com/path/
 ```
 
-**Canonical URL 规则：**
-- 英文页面：canonical = 页面本身的完整 URL
-- 本地化页面：canonical = 英文版本的 URL
-- canonical URL 必须包含协议（`https://`）
+严格规则：
+
+- `canonical` 必须是完整 URL，包含 `https://`。
+- 默认语言 canonical 指向自身。
+- 本地化内容 canonical 通常指向默认语言版本。
+- 不要在正文中到处硬编码站点域名，优先在 `seo.canonical` 中集中表达。
 
 ---
 
-## 内容创作规则（严格）
+## 最终检查清单
 
-1. **禁止在博客正文的 Markdown 中使用 ` ```javascript ` 代码块。** 请使用 ` ```bash ` 或行内 `code` 代替。Nitro 预渲染 esbuild 无法处理 Markdown 中 JS 代码块里的 `return` 语句 — 构建将失败。
-2. **不要编辑 `content/` 以外的文件**，除非明确要求。
-3. **不要添加任意路由。** 在添加 `to: /pricing` 的 nav 链接前，必须先创建 `content/pages/pricing.md`。
-4. `bodyBlocks` 中所有页面的 `to` 链接必须是有效的 JennaPress 路由。以 `https://` 开头的外部 URL 视为有效。
-5. **`publishedAt` 日期必须使用 ISO 格式**（`"YYYY-MM-DD"`）。
-6. **Slug 必须是 URL 安全的** — 使用小写、连字符，不含空格。
-7. **所有必填 front matter 字段必须存在。** 缺失必填字段会导致构建失败。
-8. **不要在正文内容中硬编码 URL。** 使用 `site.md` 中的规范域名。模板资源路径以 `/template-assets/<template-name>/` 开头。
-9. **文章的 `category` 字段必须符合实际分类。** slugified 后的值必须在模板的 `blog/blog.config.ts` 中有对应映射，否则使用 `default` 模块兜底。
+AI 完成内容维护后必须检查：
 
----
-
-## 激活方式
-
-当用户要求添加页面、撰写博客文章、翻译内容、更新站点设置，或修改 `content/` 中的任何内容时，将此提示词附加到请求前，发给 AI。
+- 只改了 `content/**` 和必要的 `public/template-assets/**`。
+- 没有修改框架层目录。
+- 所有 Markdown front matter 字段完整。
+- 所有内部链接对应真实路由。
+- 所有图片路径以 `/template-assets/<template-name>/` 开头。
+- 商品 `downloadUrl` 指向外部页面。
+- 多语言文件使用相同 `slug`。
+- 没有新增未注册 block 类型。

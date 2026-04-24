@@ -491,7 +491,10 @@ function buildLocalePayload(locale: SupportedLocale): LocalePayload {
 
   const productCategories = new Map<string, BlogCategory>()
   for (const product of productEntries) {
-    productCategories.set(product.categoryMeta.slug, product.categoryMeta)
+    const categoryMeta = product.categoryMeta
+    if (categoryMeta) {
+      productCategories.set(categoryMeta.slug, categoryMeta)
+    }
   }
   const sortedProductCategories = Array.from(productCategories.values()).sort((a, b) => a.label.localeCompare(b.label))
 
@@ -499,13 +502,15 @@ function buildLocalePayload(locale: SupportedLocale): LocalePayload {
   for (const category of sortedProductCategories) {
     productCategoryMap[category.slug] = {
       category,
-      products: productEntries.filter(product => product.categoryMeta.slug === category.slug),
+      products: productEntries.filter(product => product.categoryMeta?.slug === category.slug),
     }
   }
 
   const productMap: Record<string, Product> = {}
   for (const product of productEntries) {
-    const key = `${product.categoryMeta.slug}/${normalizeProductSlug(product.slug)}`
+    const categorySlug = product.categoryMeta?.slug
+    if (!categorySlug) continue
+    const key = `${categorySlug}/${normalizeProductSlug(product.slug)}`
     productMap[key] = product
   }
 

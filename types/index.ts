@@ -147,6 +147,7 @@ export type Product = {
   slug: string
   title: string
   description: string
+  seo?: SeoMeta
   coverImage: string
   previewImages: string[]
   price: number

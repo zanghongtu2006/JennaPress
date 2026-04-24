@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">SEO copy pack preview</title>
+  <desc id="desc">A product preview showing stacked copy documents and keyword cards.</desc>
+  <rect width="1200" height="760" fill="#fff7ed"/>
+  <rect x="178" y="96" width="470" height="568" rx="28" fill="#ffffff" stroke="#fed7aa" stroke-width="4"/>
+  <rect x="244" y="164" width="284" height="36" rx="18" fill="#13212b"/>
+  <rect x="244" y="246" width="320" height="22" rx="11" fill="#9aaab1"/>
+  <rect x="244" y="294" width="252" height="22" rx="11" fill="#9aaab1"/>
+  <rect x="244" y="342" width="340" height="22" rx="11" fill="#9aaab1"/>
+  <rect x="244" y="420" width="132" height="42" rx="12" fill="#d97706"/>
+  <rect x="560" y="150" width="470" height="464" rx="28" fill="#13212b"/>
+  <rect x="626" y="216" width="260" height="30" rx="15" fill="#2dd4bf"/>
+  <rect x="626" y="290" width="320" height="20" rx="10" fill="#7a8b94"/>
+  <rect x="626" y="336" width="246" height="20" rx="10" fill="#7a8b94"/>
+  <rect x="626" y="382" width="300" height="20" rx="10" fill="#7a8b94"/>
+  <rect x="626" y="458" width="100" height="34" rx="17" fill="#fbbf24"/>
+  <rect x="746" y="458" width="146" height="34" rx="17" fill="#0f766e"/>
+</svg>

@@ -20,6 +20,12 @@ const activeComponent = computed(() => resolveProductComponent(props.template ||
 
 // Fallback when template doesn't provide a product component for this mode
 const showFallback = computed(() => !activeComponent.value)
+
+const p = (path: string) =>
+  props.locale && props.locale !== props.defaultLocale ? `/${props.locale}${path}` : path
+
+const getProductPath = (product: Product) =>
+  p(`/products/${product.categoryMeta?.slug || 'general'}/${product.slug}`)
 </script>
 
 <template>
@@ -39,10 +45,10 @@ const showFallback = computed(() => !activeComponent.value)
             <h3 class="font-semibold">{{ product.title }}</h3>
             <p class="text-sm text-gray-600 mt-1">{{ product.description }}</p>
             <NuxtLink
-              :to="`/products/${product.categoryMeta.slug}/${product.slug}`"
+              :to="getProductPath(product)"
               class="inline-block mt-2 text-primary hover:underline text-sm"
             >
-              View Details →
+              View Details
             </NuxtLink>
           </div>
         </div>
@@ -62,10 +68,10 @@ const showFallback = computed(() => !activeComponent.value)
           <h3 class="font-semibold">{{ product.title }}</h3>
           <p class="text-sm text-gray-600 mt-1">{{ product.description }}</p>
           <NuxtLink
-            :to="`/products/${product.categoryMeta.slug}/${product.slug}`"
+            :to="getProductPath(product)"
             class="inline-block mt-2 text-primary hover:underline text-sm"
           >
-            View Details →
+            View Details
           </NuxtLink>
         </div>
       </div>
@@ -73,9 +79,9 @@ const showFallback = computed(() => !activeComponent.value)
 
     <template v-else-if="mode === 'product' && product">
       <div class="max-w-4xl mx-auto">
-        <NuxtLink to="/products" class="text-primary hover:underline text-sm mb-4 inline-block">← Back to Products</NuxtLink>
+        <NuxtLink :to="p('/products')" class="text-primary hover:underline text-sm mb-4 inline-block">Back to Products</NuxtLink>
         <div v-if="category" class="mb-2 text-sm text-gray-500">
-          <NuxtLink :to="`/products/${category.slug}`" class="hover:underline">{{ category.label }}</NuxtLink>
+          <NuxtLink :to="p(`/products/${category.slug}`)" class="hover:underline">{{ category.label }}</NuxtLink>
         </div>
         <h1 class="text-3xl font-bold mb-4">{{ product.title }}</h1>
         <img v-if="product.coverImage" :src="product.coverImage" :alt="product.title" class="w-full max-h-96 object-cover rounded-lg mb-6">

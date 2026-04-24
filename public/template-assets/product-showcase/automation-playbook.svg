@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Automation playbook preview</title>
+  <desc id="desc">A product preview showing automation steps connected across cards.</desc>
+  <rect width="1200" height="760" fill="#ecfeff"/>
+  <rect x="128" y="112" width="944" height="536" rx="30" fill="#ffffff" stroke="#99f6e4" stroke-width="4"/>
+  <path d="M300 252 H520 Q560 252 560 292 V356 Q560 396 600 396 H812" fill="none" stroke="#0f766e" stroke-width="14" stroke-linecap="round"/>
+  <path d="M300 508 H520 Q560 508 560 468 V430 Q560 396 600 396" fill="none" stroke="#d97706" stroke-width="14" stroke-linecap="round"/>
+  <rect x="190" y="190" width="220" height="124" rx="22" fill="#13212b"/>
+  <rect x="190" y="446" width="220" height="124" rx="22" fill="#fff7ed" stroke="#fed7aa" stroke-width="3"/>
+  <rect x="790" y="326" width="220" height="140" rx="22" fill="#edf7f4" stroke="#b7d5ce" stroke-width="3"/>
+  <circle cx="300" cy="252" r="24" fill="#2dd4bf"/>
+  <circle cx="300" cy="508" r="24" fill="#fbbf24"/>
+  <circle cx="900" cy="396" r="24" fill="#0f766e"/>
+  <rect x="232" y="232" width="136" height="22" rx="11" fill="#7a8b94"/>
+  <rect x="232" y="488" width="136" height="22" rx="11" fill="#9aaab1"/>
+  <rect x="832" y="376" width="136" height="22" rx="11" fill="#13212b"/>
+</svg>

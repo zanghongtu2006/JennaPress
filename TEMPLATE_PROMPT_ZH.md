@@ -1,78 +1,103 @@
-# 模板生成提示词（中文）
+# JennaPress 模板维护准则（中文）
 
-使用此提示词来让 AI 为 JennaPress CMS **生成、扩展或修改**网站模板。
-
-JennaPress 是一个静态优先、多语言、模板驱动的 Nuxt CMS。本提示词告诉 AI 模板的工作机制、必须生成哪些文件、必须遵守哪些规则，以及绝对禁止哪些操作。
+本准则用于让 AI 新增、替换或维护 JennaPress 模板。JennaPress 允许通过 `templates/`、`content/`、`public/` 三个目录维护站点样式、内容和静态资源。模板任务必须严格停留在这三个目录内。
 
 ---
 
-## 系统概述
+## 最高优先级边界
 
-### 目录边界（绝对禁止越界）
+AI 在模板维护任务中只允许修改：
 
-```
-project-root/
-├── templates/         ← 模板包存放位置
-├── public/
-│   └── template-assets/  ← 仅限模板专属资源
-├── content/          ← 所有站点内容（Markdown）
-├── components/       ← CMS 共享组件（禁止修改）
-├── pages/            ← 路由定义（禁止修改）
-├── composables/      ← 共享逻辑（禁止修改）
-├── lib/              ← 核心处理逻辑（禁止修改）
-├── types/            ← TypeScript 接口（禁止修改）
-└── assets/           ← 全局 CSS / 主题（动前需确认）
-```
+- `templates/<template-name>/**`
+- `public/template-assets/<template-name>/**`
+- `content/**`
 
-**AI 规则：禁止触碰 `components/`、`pages/`、`composables/`、`lib/`、`types/`、`assets/`，除非用户明确要求。**
+AI 禁止修改：
 
-AI 可自由操作的范围：`templates/<template-name>/`、`public/template-assets/<template-name>/`、`content/`。
+- `components/**`
+- `pages/**`
+- `composables/**`
+- `lib/**`
+- `types/**`
+- `assets/**`
+- `nuxt.config.ts`
+- `package.json`
+- `package-lock.json`
+- `.github/**`
+- 根目录应用入口文件，例如 `app.vue`、`error.vue`
+- 任何框架层路由、类型、schema、共享组件、构建配置或依赖配置
+
+如果需求无法在允许目录内完成，AI 必须停止并说明需要框架开发介入。禁止为了完成模板效果而改框架目录。
 
 ---
 
-## 模板包结构
+## 模板能力边界
 
-一个完整的模板位于 `templates/<template-name>/`：
+JennaPress 当前支持三类页面：
 
-```
+- `page`：企业页、首页、关于页、营销页
+- `blog`：博客首页、分类页、文章详情页
+- `product`：商品引流首页、分类页、商品详情页
+
+商品站只做展示和引流，不做站内成交。模板可以展示价格、标签、作者、商品图、外部购买按钮，但不能实现购物车、支付、订单、登录、库存等逻辑。
+
+---
+
+## 标准模板目录
+
+```text
 templates/<template-name>/
-├── Template.vue          ← 页面级模板（接收 PageContent，渲染 blocks）
-├── Frame.vue             ← 外层框架（HeaderBar + slot + FooterBar）
-├── template.css          ← 所有模板 CSS（BEM 命名）
-├── template.meta.json     ← 模板元数据
-└── blog/
-    ├── BlogHome.vue      ← /blog 页面模板
-    ├── BlogCategory.vue  ← /blog/:category 模板
-    ├── BlogPost.vue      ← /blog/:category/:slug 模板
-    ├── blog.config.ts    ← 分类 → 模块 映射
-    └── modules/
-        ├── DefaultCategory.vue   ← 兜底分类页
-        ├── DefaultPost.vue       ← 兜底文章页
-        ├── CasesCategory.vue     ← 可选：自定义分类布局
-        ├── CasesPost.vue         ← 可选：自定义文章布局
-        └── ...                  ← 其他自定义分类模块
-
-public/template-assets/<template-name>/
-└── （此模板专用的所有图片/字体/资源）
+  template.meta.json
+  template.css
+  Frame.vue
+  Template.vue
+  blog/
+    BlogHome.vue
+    BlogCategory.vue
+    BlogPost.vue
+    blog.config.ts
+    modules/
+      DefaultCategory.vue
+      DefaultPost.vue
+  product/
+    ProductHome.vue
+    ProductCategory.vue
+    ProductDetail.vue
 ```
 
-注意：不存在 `TemplateShell.vue`。外层框架分为：
-- `Frame.vue` = 外层包装（HeaderBar + slot + FooterBar）
-- `Template.vue` = 内层页面渲染器（接收页面内容，渲染 blocks）
+不是每个模板都必须同时支持 blog 和 product，但如果 `template.meta.json` 声明支持，就必须提供对应文件。
+
+静态资源目录：
+
+```text
+public/template-assets/<template-name>/
+  cover.svg
+  product-image.webp
+  preview.mp4
+```
+
+内容目录：
+
+```text
+content/
+  site.md
+  site.<locale>.md
+  pages/**
+  posts/**
+  products/**
+```
 
 ---
 
-## 文件逐个说明
-
-### `template.meta.json`
+## `template.meta.json`
 
 ```json
 {
-  "name": "<template-name>",
-  "version": "0.0.1",
-  "label": "人类可读的模板名称",
-  "description": "一句话描述此模板。",
-  "supportedPageTypes": ["page"],
+  "name": "product-showcase",
+  "version": "0.1.0",
+  "label": "Product Showcase",
+  "description": "A static product referral template.",
+  "supportedPageTypes": ["page", "blog", "product"],
   "supportedBlocks": [
     "hero",
     "feature-grid",
@@ -80,363 +105,264 @@ public/template-assets/<template-name>/
     "cta-banner",
     "stats",
     "contact"
-  ]
+  ],
+  "themes": ["light", "night"]
 }
 ```
 
-`supportedBlocks` 数组告知 CMS 此模板支持哪些 block 类型。不得引用不在此列表中的 block 类型。
+严格规则：
 
-### `Frame.vue`
+- `name` 必须等于模板目录名。
+- `supportedPageTypes` 只能使用 `page`、`blog`、`product`。
+- `supportedBlocks` 只能使用框架已注册 block。
+- 不允许新增 block 类型。
+- `themes` 必须能在 `template.css` 中找到对应样式。
 
-Frame 接收 `SiteConfig` 作为 prop，为每个页面包裹 Header 和 Footer。
+---
+
+## Frame 和 Page 模板
+
+`Frame.vue` 是全站外壳，接收 `site: SiteConfig`。
 
 ```vue
 <script setup lang="ts">
 import type { SiteConfig } from '~/types'
 import '~/templates/<template-name>/template.css'
-import HeaderBar from '~/templates/<template-name>/components/HeaderBar.vue'
-import FooterBar from '~/templates/<template-name>/components/FooterBar.vue'
-import SectionRail from '~/templates/<template-name>/components/SectionRail.vue'
 
 defineProps<{ site: SiteConfig }>()
 </script>
 
 <template>
   <div class="template-<template-name>-frame">
-    <HeaderBar :site="site" />
-    <SectionRail>
+    <header>...</header>
+    <main>
       <slot />
-    </SectionRail>
-    <FooterBar :site="site" />
+    </main>
+    <footer>...</footer>
   </div>
 </template>
 ```
 
-Frame 由 CMS 路由层渲染 — 无需在模板包内手动导出。
-
-### `Template.vue`
-
-Template 接收 `PageContent`，通过 `<BlockRenderer>` 渲染 block 堆栈。
+`Template.vue` 是普通 page 渲染器，接收 `page: PageContent`。
 
 ```vue
 <script setup lang="ts">
 import type { PageContent } from '~/types'
 import '~/templates/<template-name>/template.css'
-import PageSurface from '~/templates/<template-name>/components/PageSurface.vue'
 
 defineProps<{ page: PageContent }>()
 </script>
 
 <template>
-  <PageSurface>
+  <div class="template-<template-name>">
     <BlockRenderer :blocks="page.blocks" />
-  </PageSurface>
-</template>
-```
-
-### `HeaderBar.vue`
-
-HeaderBar 是多语言站点的最关键组件。必须实现语言感知的 Logo 导航。
-
-**必须照此模式实现（严格复制）：**
-
-```vue
-<script setup lang="ts">
-import type { SiteConfig } from '~/types'
-
-defineProps<{ site: SiteConfig }>()
-
-const localeHome = computed(() => {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('site-language')
-    if (saved) return '/' + saved
-  }
-  return '/'
-})
-</script>
-
-<template>
-  <header class="template-<template-name>-header">
-    <div class="container template-<template-name>-header-inner">
-      <!-- Logo: 必须使用 :href="localeHome"，禁止使用 <NuxtLink to="/"> -->
-      <a :href="localeHome" class="template-<template-name>-brand">
-        <span class="template-<template-name>-brand-mark">{{ site.logoText }}</span>
-        <span>{{ site.name }}</span>
-      </a>
-      <!-- 导航 -->
-      <nav>
-        <NuxtLink v-for="item in site.nav" :key="item.to" :to="item.to">
-          {{ item.label }}
-        </NuxtLink>
-      </nav>
-    </div>
-  </header>
-</template>
-```
-
-**HeaderBar 关键规则：**
-- Logo **必须**使用 `<a :href="localeHome">`，**禁止**使用 `<NuxtLink to="/">`
-- `localeHome` **必须**从 `localStorage.getItem('site-language')` 读取，若有值则加 `/` 前缀
-- 如果 Logo 链接到 `/`，点击后会重置用户语言到英语（这是已知的严重 BUG）
-- 导航项来自 `site.nav`，已包含 locale 前缀，直接透传即可
-
-### `FooterBar.vue`
-
-```vue
-<script setup lang="ts">
-import type { SiteConfig } from '~/types'
-import OpenSourceFooterAttribution from '~/components/shared/OpenSourceFooterAttribution.vue'
-
-defineProps<{ site: SiteConfig }>()
-</script>
-
-<template>
-  <footer class="template-<template-name>-footer">
-    <div class="container template-<template-name>-footer-inner">
-      <div class="template-<template-name>-footer-private">
-        <div>
-          <strong>{{ site.name }}</strong>
-          <div>{{ site.footerText }}</div>
-        </div>
-        <div v-if="site.contactEmail">
-          Contact: <a :href="`mailto:${site.contactEmail}`">{{ site.contactEmail }}</a>
-        </div>
-      </div>
-      <div class="template-<template-name>-footer-public">
-        <OpenSourceFooterAttribution />
-      </div>
-    </div>
-  </footer>
-</template>
-```
-
-### `SectionRail.vue`
-
-SectionRail 是全宽容器，居中并留白。必须存在于每个模板中。
-
-```vue
-<template>
-  <main class="template-<template-name>-main">
-    <slot />
-  </main>
-</template>
-```
-
-### `PageSurface.vue`
-
-PageSurface 用 `page-stack` class 包裹主内容区。
-
-```vue
-<template>
-  <div class="page-stack">
-    <slot />
   </div>
 </template>
 ```
 
-### `blog/blog.config.ts`
+规则：
 
-将博客分类映射到 Vue 组件。
+- 可以使用全局 `<BlockRenderer>`。
+- 可以从 `~/types` 导入类型。
+- 禁止从 `components/` 复制、移动或修改框架组件。
+- 模板内的业务文案应来自 `content`，不要硬编码具体客户业务内容。
+
+---
+
+## Blog 模板契约
+
+如果支持 blog，必须提供：
+
+- `blog/BlogHome.vue`
+- `blog/BlogCategory.vue`
+- `blog/BlogPost.vue`
+
+Props：
 
 ```ts
-import BlogHome from './BlogHome.vue'
-import DefaultCategory from './modules/DefaultCategory.vue'
-import DefaultPost from './modules/DefaultPost.vue'
-
-export default {
-  home: BlogHome,
-  categoryTemplates: {
-    default: DefaultCategory,
-    // 'case-study': CasesCategory,
-    // 'product-note': ProductsCategory,
-  },
-  postTemplates: {
-    default: DefaultPost,
-    // 'case-study': CasesPost,
-  }
+// BlogHome.vue
+{
+  site: SiteConfig
+  categories: BlogCategory[]
+  sections: Array<{ category: BlogCategory; posts: BlogPostSummary[] }>
+  posts: BlogPostSummary[]
+  locale?: string
+  defaultLocale?: string
 }
+
+// BlogCategory.vue
+{
+  site: SiteConfig
+  categories: BlogCategory[]
+  category: BlogCategory | null
+  posts: BlogPostSummary[]
+  locale?: string
+  defaultLocale?: string
+}
+
+// BlogPost.vue
+{
+  site: SiteConfig
+  post: BlogPostContent | null
+  locale?: string
+  defaultLocale?: string
+}
+```
+
+内部链接必须使用 locale helper：
+
+```ts
+const p = (path: string) =>
+  props.locale && props.locale !== props.defaultLocale ? `/${props.locale}${path}` : path
+```
+
+---
+
+## Product 模板契约
+
+如果支持 product，必须提供：
+
+- `product/ProductHome.vue`
+- `product/ProductCategory.vue`
+- `product/ProductDetail.vue`
+
+Props：
+
+```ts
+// ProductHome.vue
+{
+  site: SiteConfig
+  categories: BlogCategory[]
+  products: Product[]
+  sections: Array<{ category: BlogCategory; products: Product[] }>
+  locale?: string
+  defaultLocale?: string
+}
+
+// ProductCategory.vue
+{
+  site: SiteConfig
+  categories: BlogCategory[]
+  category: BlogCategory | null
+  products: Product[]
+  locale?: string
+  defaultLocale?: string
+}
+
+// ProductDetail.vue
+{
+  site: SiteConfig
+  category: BlogCategory | null
+  product: Product | null
+  locale?: string
+  defaultLocale?: string
+}
+```
+
+商品模板规则：
+
+- 商品详情 CTA 必须使用普通 `<a>` 指向 `product.downloadUrl`。
+- 外部链接必须带 `target="_blank"` 和 `rel="noopener noreferrer"`。
+- 商品列表内部链接使用 `/products/<categorySlug>/<productSlug>`，并通过 locale helper 加前缀。
+- 不允许实现站内购物车、支付、订单、账户、库存。
+- 不允许调用外部 API 获取商品数据。
+- 所有商品数据来自 `content/products/*.md`。
+
+---
+
+## 多语言链接规则
+
+模板组件收到 `locale?: string` 和 `defaultLocale?: string` 时，必须用 helper 生成内部链接：
+
+```ts
+const p = (path: string) =>
+  props.locale && props.locale !== props.defaultLocale ? `/${props.locale}${path}` : path
 ```
 
 规则：
-- `categoryTemplates` 和 `postTemplates` 必须提供 `default`
-- 未映射的分类回退到 `default`
-- 分类来自文章 front matter 的 `category` 字段，slugified 后匹配
 
-### Blog 组件的 Props
-
-- `BlogHome.vue`: `site`, `categories`, `sections: Array<{ category, posts }>`, `locale?`, `defaultLocale?`
-- `BlogCategory.vue`: `site`, `category`, `posts`, `locale?`, `defaultLocale?`
-- `BlogPost.vue`: `site`, `post`, `locale?`, `defaultLocale?`
-
-Blog 组件内 locale 前缀辅助函数：
-
-```ts
-const props = defineProps<{ ...; locale?: string; defaultLocale?: string }>()
-const p = (path: string) =>
-  (props.locale && props.locale !== props.defaultLocale)
-    ? ('/' + props.locale + path)
-    : path
-```
-
-在 Blog 组件内使用 `p('/blog')` 生成带 locale 前缀的链接。
+- `site.nav` 已由框架处理，可直接渲染。
+- 模板内部手写链接必须使用 `p('/path')`。
+- 外部链接不加 locale。
+- 不要修改路由文件来处理语言。
 
 ---
 
-## CSS 命名规范（BEM）
+## CSS 规则
 
-所有模板 CSS 使用带模板前缀的 BEM 命名：
+所有模板 CSS 必须放在：
 
-```css
-.template-<template-name> { }                        /* Block */
-.template-<template-name>-frame { }                  /* Element: frame */
-.template-<template-name>-header { }                /* Element: header */
-.template-<template-name>-header-inner { }          /* Element: header inner */
-.template-<template-name>-brand { }                 /* Element: brand */
-.template-<template-name>-brand--active { }         /* Modifier: brand 激活状态 */
-.template-<template-name>-nav { }                    /* Element: nav */
-.template-blog { }                                  /* Block: blog 共享 */
-.template-blog-hero { }                             /* Element: blog hero */
-.template-post-card { }                             /* Block: post card */
-.template-post-card--featured { }                   /* Modifier: featured card */
+```text
+templates/<template-name>/template.css
 ```
 
-CSS 文件必须在 `Frame.vue` 和 `Template.vue` 中同时引入。
+规则：
 
----
+- 使用模板名前缀，避免污染其他模板。
+- 不修改 `assets/main.css`。
+- 不依赖 Tailwind，除非项目已经明确为该模板提供了依赖。
+- 卡片圆角建议不超过 8px，除非设计有明确理由。
+- 主题用 CSS 变量实现，挂在模板根 class 或 `html[data-theme='name']` 下。
+- 不在 JS 中实现主题系统。
 
-## 主题系统
-
-主题通过 CSS 自定义属性（CSS Custom Properties）实现，挂在 `document.documentElement`（即 `<html>` 元素）上。
-
-**可用主题列表**在 `content/site.md` 的 `themes: []` 中定义。用户选择的主题存储在 `localStorage` 的 `site-theme` 字段。
-
-**工作原理：**
-- `localStorage.getItem('site-theme')` → 主题名字符串
-- CMS 在页面渲染前注入 `<html data-theme="dark">`（或对应值）
-- 模板 CSS 必须将所有颜色值定义为 CSS 变量，作用域为 `[data-theme="..."]`
+示例：
 
 ```css
-/* Light 主题 */
-[data-theme="light"] {
-  --primary: #3b82f6;
-  --background: #ffffff;
-  --text: #1e293b;
+.template-product-showcase-frame {
+  --surface: #ffffff;
+  --text: #172026;
 }
 
-/* Dark 主题 */
-[data-theme="dark"] {
-  --primary: #60a5fa;
-  --background: #0f172a;
-  --text: #f1f5f9;
-}
-
-/* Pink 主题 */
-[data-theme="pink"] {
-  --primary: #ec4899;
-  --background: #fdf2f8;
-  --text: #831843;
+html[data-theme='night'] .template-product-showcase-frame {
+  --surface: #14212a;
+  --text: #f8fafc;
 }
 ```
 
-模板组件引用这些变量：
+---
 
-```css
-background: var(--background);
-color: var(--text);
-border-color: var(--border);
-```
+## Content 配套规则
 
-**ThemeSelect 组件**由 CMS 提供（在 `components/shared/` 中）。无需自己构建。模板 CSS 必须支持 `site.md` 中声明的所有主题。
+模板任务可以同时更新 `content/site*.md`、`content/pages/**`、`content/posts/**`、`content/products/**`，用于让模板有可预览的示例内容。
+
+严格规则：
+
+- 不要为了模板效果修改框架 schema。
+- 内容字段必须符合现有 schema。
+- 商品内容必须使用外部 `downloadUrl`。
+- 图片必须放到 `public/template-assets/<template-name>/`。
+- `site.md` 中的 `defaultTemplate` 可以切换为新模板，但 localized `site.<locale>.md` 也要同步考虑。
 
 ---
 
-## 可用 Block 类型
+## 禁止事项
 
-这些已在全局 `BlockRenderer.vue` 中注册。可以在页面的 `bodyBlocks` front matter 中使用：
+AI 绝对禁止：
 
-| Block 类型 | Front Matter 字段 |
-|---|---|
-| `hero` | `kicker`, `title`, `description`, `primaryAction: {label, to}`, `secondaryAction: {label, to}`, `panelTitle`, `panelLines[]` |
-| `feature-grid` | `title`, `description?`, `items: Array<{title, description}>` |
-| `rich-text` | `title?`, `html`（原始 HTML 字符串） |
-| `cta-banner` | `title`, `description?`, `action: {label, to}` |
-| `stats` | `title`, `description?`, `items: Array<{value, label, note?}>` |
-| `contact` | `title`, `description?`, `email?`, `phone?`, `address?` |
+1. 修改 `components/`、`pages/`、`composables/`、`lib/`、`types/`、`assets/`。
+2. 修改 `nuxt.config.ts`、`package.json`、`.github/**`。
+3. 新增 npm 依赖。
+4. 新增路由文件。
+5. 新增 block 类型。
+6. 修改全局 schema 或类型来适配模板。
+7. 实现运行时 CMS、后端 API、站内支付、购物车或登录。
+8. 把模板资源放到 `public/` 根目录。
+9. 让模板依赖当前模板目录之外的私有组件。
+10. 在内容 markdown 中生成 `\`\`\`javascript` 代码块。
 
-**重要：**博客文章的 Markdown 正文不属于 block 类型。博客文章正文独立于 block 系统渲染。`rich-text` block 仅用于结构化页面内容（`content/pages/`）。
-
----
-
-## 多语言路由规则
-
-JennaPress 使用基于 URL 的语言路由：
-- 英语（默认）：无前缀 — `/`、`/about`、`/blog`
-- 其他语言：`/de/`、`/zh/`、`/es/`、`/el/` — `/de/about`、`/zh/blog`
-
-语言列表来自 `content/l18n.ts`。路由由 `nuxt.config.ts` 的 pages hook 处理。无需手动添加语言路由。
-
-**在模板组件中：**
-- Props 已包含 `locale?: string` 和 `defaultLocale?: string`
-- 使用 `p('/path')` 辅助函数生成带 locale 前缀的链接
-- `site.nav` 中的导航链接无需处理 locale 前缀，CMS 会自动按页面路由添加
-- **HeaderBar Logo 链接必须使用语言感知逻辑**（见 HeaderBar 章节）
+如果以上任何事项看似必要，AI 必须停止并向用户说明原因。
 
 ---
 
-## Category 到模块的映射
+## 最终检查清单
 
-文章 front matter 的 `category` 字段 → slugified → 在 `blog.config.ts` 中匹配。
+完成模板任务后必须检查：
 
-示例：`category: Case Study` → slugified 为 `case-study` → 查找 `categoryTemplates['case-study']`。
-
-若没有对应映射，使用 `default`。
-
-category 同时决定使用哪个 `postTemplates` 变体来渲染文章详情页。
-
----
-
-## AI 必须禁止的行为
-
-1. **禁止重命名或重构框架文件** — `components/`、`pages/`、`composables/`、`lib/`、`types/` 已锁定。
-2. **禁止新增 block 类型** — block 类型在全局 `components/BlockRenderer.vue` 中注册。扩展 block 系统前必须询问用户。
-3. **禁止对 Logo 使用 `<NuxtLink to="/">`** — 这会破坏语言持久化。必须使用语言感知的 `localeHome` 模式。
-4. **禁止硬编码业务文案** — 所有内容必须来自 Markdown front matter。
-5. **禁止为基础页面渲染引入运行时数据获取** — 这是静态优先 CMS。
-6. **禁止在内容 Markdown 中创建 JavaScript 代码块** — Nitro 预渲染阶段的 esbuild 无法解析 Markdown 中 ` ```javascript ` 块里的 `return` 语句，会导致构建失败。
-7. **禁止在 JavaScript 中处理主题逻辑** — 主题是纯 CSS 自定义属性，通过 `data-theme` 属性控制。
-8. **禁止在模板文件内从 `~/components/` 导入** — 除非是明确标注为模板可用的共享组件（如 `OpenSourceFooterAttribution`）。
-
----
-
-## AI 可能收到的输入类型
-
-用户可能提供：
-- 业务描述 → 推导专业公司网站结构
-- 结构化需求列表 → 映射到模板组件和 blocks
-- Landing page 需求 → 生成 `Template.vue` + blocks
-- 已有 HTML → 保留视觉意图，重构为模板组件
-- 设计截图 → 推导布局区块，用 Vue + CSS 还原
-- Figma 导出描述 → 同上
-- 线框图 → 同上
-
-AI 将以上所有输入转换为 `templates/<template-name>/` 下的模板包。
-
----
-
-## 要求的输出格式
-
-每次模板生成请求都必须返回：
-
-1. 视觉系统说明（1-2 句话）
-2. 完整文件树
-3. 每个必需文件的完整代码（禁止片段）
-4. 明确列出的所有假设
-5. 禁止营销文案或框架重构建议
-
-代码必须可投产，可直接接入 JennaPress 模板协议。
-
----
-
-## 激活方式
-
-当用户说"生成模板"、"create a new template"或"添加一个模板"时，将此完整提示词附加到请求前，发给 AI。
+- 修改仅发生在 `templates/<template-name>/**`、`public/template-assets/<template-name>/**`、`content/**`。
+- `template.meta.json` 的 `name` 与目录名一致。
+- 声明支持 product 时，三个 product 组件都存在。
+- 声明支持 blog 时，三个 blog 组件都存在。
+- 所有内部链接支持 locale helper。
+- 商品 CTA 全部指向外部 URL。
+- CSS 没有污染其他模板。
+- 示例内容能通过现有 content schema。

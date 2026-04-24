@@ -1,61 +1,91 @@
-# Content Authoring Prompt (English)
+# JennaPress Content Maintenance Rules
 
-Use this prompt when asking an AI to create, update, or manage content for a JennaPress CMS site.
+Use this prompt when an AI maintains JennaPress site content. JennaPress is a static Nuxt site framework. Site pages, blog posts, product referral content, and static assets must be maintained through `content/`, `public/`, and `templates/`.
 
-JennaPress is a static-first, multilingual CMS where all content lives in Markdown files. This prompt defines exactly how content files are structured, how multilingual content works, how to configure themes, and what content authors must never change.
+This file is for content work only. For template design or template implementation, use `TEMPLATE_PROMPT_EN.md`.
 
 ---
 
-## Content File Locations
+## Highest-Priority Boundary
 
-```
+For content maintenance tasks, AI may only modify:
+
+- `content/**`
+- `public/template-assets/**`
+
+For content maintenance tasks, AI must never modify:
+
+- `templates/**`
+- `components/**`
+- `pages/**`
+- `composables/**`
+- `lib/**`
+- `types/**`
+- `assets/**`
+- `nuxt.config.ts`
+- `package.json`
+- `package-lock.json`
+- `.github/**`
+- any framework-level routing, schema, shared component, type, or build logic
+
+If the user asks to modify a forbidden path, stop and explain that the request is outside the content-maintenance boundary. It should be handled as a template-maintenance task or framework-development task.
+
+---
+
+## Content Structure
+
+```text
 content/
-├── site.md              ← site-wide settings (name, nav, themes, etc.)
-├── l18n.ts              ← locale definitions (language codes and labels)
-├── pages/
-│   ├── index.md         ← homepage content
-│   ├── about.md         ← about page
-│   ├── principles.md    ← principles page
-│   └── <locale>/
-│       ├── index.md     ← localized homepage
-│       ├── about.md     ← localized about page
-│       └── ...
-└── posts/
-    ├── release-notes-v1-0-0.md    ← English post
-    ├── current-support-status.md  ← English post
-    └── <locale>/
-        ├── release-notes-v1-0-0.md   ← localized post (same slug)
-        └── ...
+  site.md                 default-locale site config
+  site.<locale>.md        localized site config
+  l18n.ts                 locale list and default locale
+  pages/
+    index.md              homepage
+    about.md              regular page
+    <locale>/
+      index.md            localized homepage
+  posts/
+    my-post.md            default-locale blog post
+    <locale>/
+      my-post.md          localized blog post
+  products/
+    product-slug.md       default-locale product referral content
+    <locale>/
+      product-slug.md     localized product content, optional
 ```
 
-**Absolute rule: Only edit files inside `content/`. Never touch `templates/`, `components/`, `pages/`, `composables/`, `lib/`, `types/`, or `assets/`.**
+```text
+public/
+  template-assets/
+    <template-name>/
+      image.svg
+      product-cover.webp
+      video.mp4
+```
 
 ---
 
-## `content/site.md` — Site Configuration
+## Site Config Rules
 
-This is NOT a content page. It is the site configuration file. Edit it to change site identity, navigation, themes, and default settings.
+`content/site.md` and `content/site.<locale>.md` control site identity, navigation, active template, themes, and footer text.
 
 ```yaml
 ---
-name: Jenna Press
-logoText: JP
+name: Example Store
+logoText: ES
 siteUrl: https://www.example.com
-defaultTemplate: corporate-basic
-defaultTheme: dark
+defaultTemplate: product-showcase
+defaultTheme: light
 themes:
-  - dark
   - light
-  - pink
-tagline: Your site tagline here.
+  - night
+tagline: Curated products for faster launches.
 nav:
-  - label: Home
-    to: /
-  - label: About
-    to: /about
+  - label: Products
+    to: /products
   - label: Blog
     to: /blog
-footerText: Footer text for all pages.
+footerText: Static product discovery, external checkout.
 contactEmail: hello@example.com
 socialLinks:
   - label: GitHub
@@ -63,331 +93,263 @@ socialLinks:
 ---
 ```
 
-**Available fields:**
+Strict rules:
 
-| Field | Required | Description |
-|---|---|---|
-| `name` | Yes | Site display name (used in HeaderBar, FooterBar, SEO) |
-| `logoText` | Yes | Short logo text (e.g. "JP", "ACME") |
-| `siteUrl` | Yes | Full URL of the production site (used for canonical URLs and sitemap) |
-| `defaultTemplate` | Yes | Which template to use (must match a folder name in `templates/`) |
-| `defaultTheme` | Yes | Which theme to load by default (must match a `[data-theme]` in template CSS) |
-| `themes` | Yes | List of available themes (users can switch between these) |
-| `tagline` | No | Short site tagline |
-| `nav` | Yes | Navigation links. `to` must match a route (use `/` for root, `/about` for pages, `/blog` for blog index) |
-| `footerText` | Yes | Footer tagline text |
-| `contactEmail` | No | Contact email displayed in footer |
-| `socialLinks` | No | List of `{label, to}` pairs for footer social links |
-
-**Navigation rules:**
-- Every `to` path must be a valid route. JennaPress routes: `/`, `/about`, `/principles`, `/blog`, `/blog/:category`, `/blog/:category/:slug`
-- Adding arbitrary routes like `/pricing` requires first creating `content/pages/pricing.md`
-- Do NOT prefix nav `to` values with locale codes — the routing system handles that automatically
+- `defaultTemplate` must match a folder under `templates/<template-name>/`.
+- Content tasks may switch `defaultTemplate`, but must not edit template code.
+- `defaultTheme` must exist in the `themes` array.
+- `nav.to` must point to a real static route, such as `/`, `/about`, `/blog`, `/products`, `/products/<category>`.
+- Do not add a locale prefix for the default locale.
+- Localized `site.<locale>.md` files may use localized paths such as `/zh/products`, but those paths must match real routes.
+- For a product referral site, include `/products` in navigation.
 
 ---
 
-## `content/l18n.ts` — Locale Definitions
+## Locale Rules
 
-This file defines which languages the site supports. Edit it to add or remove languages.
+`content/l18n.ts` may only be edited to maintain the locale list. Do not add unrelated TypeScript logic.
 
 ```ts
-export type LocaleConfig = {
-  code: string
-  label: string
-  isDefault?: boolean
-}
-
-export const locales: LocaleConfig[] = [
+export const locales = [
   { code: 'en', label: 'English', isDefault: true },
-  { code: 'de', label: 'Deutsch' },
-  { code: 'el', label: 'Ελληνικά' },
-  { code: 'es', label: 'Español' },
   { code: 'zh', label: '中文' },
 ]
 ```
 
-**Rules:**
-- Exactly one locale must have `isDefault: true` — this is the fallback language
-- The default locale has NO URL prefix (`/` not `/en/`)
-- All other locales get a URL prefix (`/de/`, `/zh/`, etc.)
-- Adding a new locale: add to this array AND create a locale subdirectory in both `content/pages/` and `content/posts/`
-- Removing a locale: remove from this array AND remove the locale subdirectory from both `content/pages/` and `content/posts/`
+Strict rules:
+
+- Exactly one locale must have `isDefault: true`.
+- The default locale has no URL prefix.
+- Non-default locales use `/<locale>/` prefixes.
+- Localized pages, posts, and products should keep the same `slug`.
+- Missing localized files fall back to the default-locale content.
 
 ---
 
-## Page Content (`content/pages/`)
+## Page Rules
 
-### English pages (default)
+Pages live in `content/pages/`.
 
 ```yaml
 ---
-slug: /
-title: Homepage
-summary: One-sentence description for SEO and social sharing.
+slug: /about
+title: About
+summary: Short page summary.
 seo:
-  title: Homepage | Site Name
-  description: Full meta description for SEO.
-  canonical: https://www.example.com/
-bodyTitle: Welcome to Our Site
-bodyBlocks:
+  title: About | Example Store
+  description: SEO description.
+  canonical: https://www.example.com/about/
+blocks:
   - type: hero
-    kicker: Company Name
-    title: Main Headline
-    description: Subheadline describing your value proposition.
+    kicker: About
+    title: A focused static site
+    description: Clear copy for a static-first site.
     primaryAction:
-      label: Get Started
-      to: /about
-    secondaryAction:
-      label: Read More
-      to: /blog
+      label: View products
+      to: /products
   - type: feature-grid
-    title: Why Choose Us
+    title: Why it works
     items:
-      - title: Feature One
-        description: Description of feature one.
-      - title: Feature Two
-        description: Description of feature two.
-  - type: cta-banner
-    title: Ready to Start?
-    description: Call to action description.
-    action:
-      label: Contact Us
-      to: /about
+      - title: Static
+        description: Fast hosting and predictable SEO.
 ---
-Introductory paragraph content here.
+
+Markdown body can be added here. It becomes a rich text block.
 ```
 
-### Localized pages
+Supported page block types:
 
-Create `content/pages/<locale>/<slug>.md`. Example: `content/pages/de/index.md`, `content/pages/de/about.md`.
+- `hero`
+- `feature-grid`
+- `rich-text`
+- `cta-banner`
+- `stats`
+- `contact`
 
-**Localization rules:**
-- Use the same `slug` field as the English version
-- The page title, summary, body, and all block text should be in the target language
-- SEO `canonical` should point to the English version URL
-- If no localized version exists for a page, the English version is shown (if locale prefix matches a supported locale)
+Do not invent new block types. Block registration belongs to the framework layer.
 
 ---
 
-## Blog Post Content (`content/posts/`)
+## Blog Rules
 
-### English posts (default)
+Blog posts live in `content/posts/`.
 
 ```yaml
 ---
-slug: my-first-post
-title: My First Blog Post
-summary: A concise summary of this post for blog listing cards and SEO.
-publishedAt: "2026-04-01"
-category: Project
+slug: product-selection-guide
+title: Product Selection Guide
+summary: A practical guide for comparing product resources.
+publishedAt: "2026-04-24"
+updatedAt: "2026-04-24"
+category: Usage
 tags:
-  - tag-one
-  - tag-two
+  - guide
+  - products
 author:
-  name: Author Name
-  avatar: /template-assets/corporate-basic/avatar-placeholder.png
+  name: Example Store
 seo:
-  title: My First Blog Post | Site Name
-  description: SEO meta description of this post.
-  canonical: https://www.example.com/blog/project/my-first-post
-bodyTitle: My First Blog Post
+  title: Product Selection Guide | Example Store
+  description: Learn how to compare product resources.
+  canonical: https://www.example.com/blog/usage/product-selection-guide/
 bodyBlocks:
   - type: cta-banner
-    title: Questions or Feedback?
-    description: Let us know what you think.
+    title: Browse products
     action:
-      label: Open an Issue
-      to: https://github.com/example/issues
+      label: Open catalog
+      to: /products
 ---
-Your blog post body content goes here as plain markdown.
 
-You can use **bold**, *italic*, and [links](https://example.com).
-
-Do NOT use triple-backtick JavaScript code blocks (```javascript) in blog post body content.
-Nitro's prerender esbuild cannot parse return statements inside markdown JS blocks,
-which causes the build to fail with: "Expected ; but found undefined".
-Use regular paragraphs or ```bash instead.
+Write normal Markdown body here.
 ```
 
-### Localized posts
+Strict rules:
 
-Create `content/posts/<locale>/<slug>.md`. Example: `content/posts/de/my-first-post.md`.
-
-Use the same `slug` as the English version. Translate all user-facing fields.
-
-### Category field
-
-The `category` field determines which blog category the post belongs to. It is slugified automatically (spaces → hyphens, lowercase).
-
-Valid categories: `Project`, `Usage`, `Case Study`, `Product Note`, `Event Promo`, etc.
-
-The slugified category name is matched in the template's `blog/blog.config.ts` to determine which blog module component renders it.
-
-**Important:** If a template doesn't have a module registered for a category, it falls back to `default`.
+- `publishedAt` and `updatedAt` use `"YYYY-MM-DD"`.
+- `slug` uses lowercase letters, numbers, and hyphens.
+- `category` is automatically slugified, for example `Product Note` becomes `product-note`.
+- Do not create `\`\`\`javascript` code blocks in Markdown bodies. Prefer inline code or `\`\`\`bash` for examples.
 
 ---
 
-## Available Block Types for Pages
+## Product Rules
 
-Use these in the `bodyBlocks` array of page content files (`content/pages/*.md`).
-
-### `hero`
+Products live in `content/products/`. Products cannot be purchased on the site. They must refer users to an external checkout, download, or seller page.
 
 ```yaml
-- type: hero
-  kicker: Optional kicker above the title
-  title: Main Hero Headline
-  description: Subheadline copy.
-  primaryAction:
-    label: CTA Button Label
-    to: /about          # internal path OR full URL
-  secondaryAction:
-    label: Secondary CTA
-    to: /blog
-  panelTitle: Optional right-side panel title
-  panelLines:           # lines shown in right-side panel
-    - Line one
-    - Line two
+---
+slug: conversion-landing-kit
+title: Conversion Landing Kit
+description: A polished landing page kit for paid traffic and launch campaigns.
+seo:
+  title: Conversion Landing Kit | Example Store
+  description: A static-friendly landing page kit for product launches.
+  canonical: https://www.example.com/products/landing-kits/conversion-landing-kit/
+coverImage: /template-assets/product-showcase/conversion-landing-kit.svg
+previewImages:
+  - /template-assets/product-showcase/conversion-landing-kit.svg
+price: 49
+isFree: false
+downloadUrl: https://example.com/checkout/conversion-landing-kit
+author: Example Studio
+authorUrl: https://www.example.com
+category: Landing Kits
+categorySlug: landing-kits
+categoryLabel: Landing Kits
+categoryDescription: Ready-to-adapt product pages for lead capture and launch campaigns.
+categoryListTitle: Landing kits that can ship quickly
+categoryAccent: product-note
+tags:
+  - landing-page
+  - campaign
+downloadCount: 2840
+createdAt: "2026-04-01"
+updatedAt: "2026-04-18"
+blocks:
+  - type: feature-grid
+    title: What is included
+    items:
+      - title: Hero sections
+        description: Conversion-focused above-the-fold sections.
+      - title: FAQ sections
+        description: Blocks for objections, proof, and comparison.
+  - type: cta-banner
+    title: Continue to seller
+    action:
+      label: Open seller page
+      to: https://example.com/checkout/conversion-landing-kit
+---
 ```
 
-### `feature-grid`
+Required fields:
 
-```yaml
-- type: feature-grid
-  title: Section Title
-  description: Optional section description.
-  items:
-    - title: Feature Title
-      description: Feature description.
-    - title: Another Feature
-      description: Another description.
-```
+- `slug`
+- `title`
+- `description`
+- `coverImage`
+- `previewImages`
+- `price`
+- `isFree`
+- `downloadUrl`
+- `author`
+- `authorUrl`
+- `category`
+- `tags`
+- `downloadCount`
+- `createdAt`
+- `updatedAt`
 
-### `rich-text`
+Recommended fields:
 
-```yaml
-- type: rich-text
-  title: Optional Section Title
-  html: |
-    <p>This is <strong>rich text</strong> content.</p>
-    <p>Use <a href="/about">internal links</a> or
-       <a href="https://example.com">external links</a>.</p>
-```
+- `seo`
+- `categorySlug`
+- `categoryLabel`
+- `categoryDescription`
+- `categoryListTitle`
+- `categoryAccent`
+- `blocks`
 
-### `cta-banner`
+Product rules:
 
-```yaml
-- type: cta-banner
-  title: Call to Action Headline
-  description: Supporting description text.
-  action:
-    label: Button Label
-    to: /contact
-```
-
-### `stats`
-
-```yaml
-- type: stats
-  title: Our Numbers
-  description: Optional intro text.
-  items:
-    - value: "100+"
-      label: Customers
-      note: worldwide
-    - value: "99.9%"
-      label: Uptime
-```
-
-### `contact`
-
-```yaml
-- type: contact
-  title: Get in Touch
-  description: Contact page intro.
-  email: hello@example.com
-  phone: "+49 30 123456"
-  address: Example Street 1, 10115 Berlin, Germany
-```
+- `downloadUrl` must point to an external checkout, download, or seller page.
+- Do not create in-site payment, cart, order, inventory, account, or login behavior.
+- Product images must live in `public/template-assets/<template-name>/`.
+- Image paths must use `/template-assets/<template-name>/<file>`.
+- Prefer explicit `categorySlug` to avoid locale-specific category slug differences.
+- Localized products should keep the same `slug` and `categorySlug`.
 
 ---
 
-## Theme Configuration
+## Static Asset Rules
 
-Themes are NOT set in content files. Themes are:
-1. Declared in `content/site.md` under `themes: []`
-2. Implemented as CSS custom properties in the active template's `template.css`
-3. Selected by users via a ThemeSelect component (UI provided by the template)
+AI may create, replace, or delete:
 
-To add a new theme to the site:
-1. Edit `content/site.md` → add theme name to `themes` array
-2. Edit the template's `template.css` → add a `[data-theme="theme-name"]` block with CSS variable definitions
+- `public/template-assets/<template-name>/**`
 
-To change the default theme: edit `content/site.md` → change `defaultTheme`.
+AI must not modify:
 
----
+- `public/favicon.svg`
+- `public/robots.txt`
+- search-engine verification files
+- root-level `public/` files related to site verification or SEO verification
 
-## Multilingual Content Rules
+Asset naming rules:
 
-### Adding a new language
-
-1. Add the locale to `content/l18n.ts`
-2. Create `content/pages/<locale>/` directory with translated pages
-3. Create `content/posts/<locale>/` directory with translated posts
-4. Keep the same `slug` in every localized file
-5. Update `canonical` URL in localized page/post front matter to point to English version
-
-### Translating posts
-
-For every English post `content/posts/<slug>.md`, create:
-- `content/posts/de/<slug>.md`
-- `content/posts/zh/<slug>.md`
-- etc.
-
-All localized versions must share the same `slug` field value. Only the content (title, summary, body, block text) is translated.
-
-### Translating pages
-
-For every English page `content/pages/<slug>.md`, create:
-- `content/pages/de/<slug>.md`
-- etc.
-
-Same rules as posts: share `slug`, translate content, canonical → English URL.
+- Use lowercase letters, numbers, and hyphens.
+- Do not use spaces.
+- Product images should use `.webp`, `.jpg`, `.png`, or `.svg`.
+- Videos may use `.mp4`, but static-hosting size must be considered.
 
 ---
 
-## SEO Fields
+## SEO Rules
 
-Every page and post supports:
+Pages, posts, and products should provide `seo`:
 
 ```yaml
 seo:
-  title: Page Title | Site Name    # shown in <title> and social cards
-  description: Meta description.   # shown in search results and social cards
-  canonical: https://www.example.com/page   # canonical URL (always the English version for localized content)
+  title: Page Title | Site Name
+  description: Search-result-ready description.
+  canonical: https://www.example.com/path/
 ```
 
-**Canonical URL rules:**
-- English pages: canonical = full URL of the page itself
-- Localized pages: canonical = URL of the English version
-- Always include the protocol (`https://`) in canonical URLs
+Strict rules:
+
+- `canonical` must be a full URL with `https://`.
+- Default-locale canonical points to itself.
+- Localized content canonical usually points to the default-locale version.
+- Avoid scattering hardcoded domains in body content. Prefer canonical URLs in front matter.
 
 ---
 
-## Content Authoring Rules (Strict)
+## Final Checklist
 
-1. **Do NOT create ` ```javascript ` code blocks in blog post markdown bodies.** Use ` ```bash ` or inline `code` instead. Nitro prerender esbuild cannot handle `return` statements inside JS code blocks in markdown — the build will fail.
-2. **Do NOT edit files outside `content/`** unless explicitly asked.
-3. **Do NOT add arbitrary routes.** Before adding a nav link with `to: /pricing`, create `content/pages/pricing.md` first.
-4. **All page `to` links in `bodyBlocks` must be valid JennaPress routes.** External URLs (starting with `https://`) are valid.
-5. **Keep `publishedAt` dates in ISO format** (`"YYYY-MM-DD"`).
-6. **Slug must be URL-safe** — use lowercase, hyphens, no spaces.
-7. **All mandatory front matter fields must be present.** Missing required fields cause build failures.
-8. **Do not hardcode URLs in body content.** Use the canonical domain from `site.md`. For template-assets, use paths starting with `/template-assets/<template-name>/`.
-9. **`category` field in posts must match real-world categorization.** Slugified value must have a corresponding mapping in the template's `blog/blog.config.ts`, or the `default` module will be used.
+After content maintenance, AI must check:
 
----
-
-## Activation
-
-When the user asks to add a page, write a blog post, translate content, update site settings, or modify anything in `content/`, prepend this prompt to the request.
+- Only `content/**` and required `public/template-assets/**` files changed.
+- No framework-level directory changed.
+- All Markdown front matter fields are complete.
+- All internal links point to real routes.
+- All image paths start with `/template-assets/<template-name>/`.
+- Product `downloadUrl` points to an external page.
+- Localized files use matching `slug` values.
+- No unregistered block type was introduced.

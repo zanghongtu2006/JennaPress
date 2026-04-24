@@ -224,10 +224,6 @@ export default defineNuxtConfig({
     url: readFrontMatter(path.resolve(process.cwd(), 'content/site.md')).siteUrl || '',
     trailingSlash: true,
   },
-  sitemap: {
-    hostname: readFrontMatter(path.resolve(process.cwd(), 'content/site.md')).siteUrl || '',
-  },
-
   hooks: {
     'pages:extend'(pages) {
       const root = process.cwd()

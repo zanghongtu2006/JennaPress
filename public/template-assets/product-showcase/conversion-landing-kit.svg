@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Conversion Landing Kit preview</title>
+  <desc id="desc">A product preview showing a landing page layout with sections and conversion cards.</desc>
+  <rect width="1200" height="760" fill="#eef7f4"/>
+  <rect x="96" y="84" width="1008" height="592" rx="28" fill="#ffffff" stroke="#cbdeda" stroke-width="4"/>
+  <rect x="140" y="130" width="920" height="60" rx="16" fill="#13212b"/>
+  <circle cx="178" cy="160" r="14" fill="#2dd4bf"/>
+  <rect x="222" y="148" width="180" height="24" rx="12" fill="#d9f4ee"/>
+  <rect x="780" y="146" width="120" height="28" rx="14" fill="#fbbf24"/>
+  <rect x="916" y="146" width="108" height="28" rx="14" fill="#2dd4bf"/>
+  <rect x="148" y="248" width="430" height="56" rx="14" fill="#0f766e"/>
+  <rect x="148" y="326" width="350" height="24" rx="12" fill="#7a8b94"/>
+  <rect x="148" y="370" width="390" height="24" rx="12" fill="#9aaab1"/>
+  <rect x="148" y="430" width="156" height="48" rx="12" fill="#d97706"/>
+  <rect x="638" y="248" width="326" height="230" rx="24" fill="#edf7f4" stroke="#b7d5ce" stroke-width="3"/>
+  <rect x="682" y="292" width="238" height="36" rx="12" fill="#13212b"/>
+  <rect x="682" y="354" width="198" height="20" rx="10" fill="#7a8b94"/>
+  <rect x="682" y="392" width="238" height="20" rx="10" fill="#9aaab1"/>
+  <rect x="682" y="430" width="128" height="28" rx="14" fill="#0f766e"/>
+  <rect x="148" y="548" width="250" height="74" rx="18" fill="#fff7ed" stroke="#fed7aa" stroke-width="3"/>
+  <rect x="474" y="548" width="250" height="74" rx="18" fill="#ecfeff" stroke="#99f6e4" stroke-width="3"/>
+  <rect x="800" y="548" width="250" height="74" rx="18" fill="#f8fafc" stroke="#dce5ea" stroke-width="3"/>
+</svg>

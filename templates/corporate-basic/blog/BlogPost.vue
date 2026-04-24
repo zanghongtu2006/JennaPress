@@ -8,7 +8,7 @@ import blogConfig from './blog.config'
 
 
 
-const props = defineProps<{ site: SiteConfig; post: BlogPostContent | null }>()
+const props = defineProps<{ site: SiteConfig; post: BlogPostContent | null; locale?: string; defaultLocale?: string }>()
 
 
 

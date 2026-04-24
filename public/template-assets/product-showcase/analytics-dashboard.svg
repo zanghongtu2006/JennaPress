@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Analytics dashboard template preview</title>
+  <desc id="desc">A product preview showing dashboard panels, metrics, and charts.</desc>
+  <rect width="1200" height="760" fill="#f6f8fb"/>
+  <rect x="82" y="72" width="1036" height="616" rx="30" fill="#13212b"/>
+  <rect x="126" y="116" width="214" height="528" rx="24" fill="#0f1b22"/>
+  <rect x="374" y="116" width="700" height="118" rx="22" fill="#ffffff"/>
+  <rect x="414" y="154" width="180" height="26" rx="13" fill="#0f766e"/>
+  <rect x="414" y="194" width="300" height="18" rx="9" fill="#9aaab1"/>
+  <rect x="838" y="152" width="170" height="46" rx="14" fill="#d97706"/>
+  <rect x="374" y="270" width="210" height="156" rx="22" fill="#ecfeff"/>
+  <rect x="620" y="270" width="210" height="156" rx="22" fill="#fff7ed"/>
+  <rect x="864" y="270" width="210" height="156" rx="22" fill="#edf7f4"/>
+  <rect x="374" y="462" width="700" height="182" rx="22" fill="#ffffff"/>
+  <polyline points="428,586 506,548 584,568 662,498 740,526 818,476 1016,514" fill="none" stroke="#0f766e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="154" y="150" width="136" height="24" rx="12" fill="#2dd4bf"/>
+  <rect x="154" y="218" width="112" height="18" rx="9" fill="#667986"/>
+  <rect x="154" y="262" width="140" height="18" rx="9" fill="#667986"/>
+  <rect x="154" y="306" width="94" height="18" rx="9" fill="#667986"/>
+</svg>

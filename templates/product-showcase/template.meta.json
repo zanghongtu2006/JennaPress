@@ -1,0 +1,22 @@
+{
+  "name": "product-showcase",
+  "version": "0.1.0",
+  "label": "Product Showcase",
+  "description": "A conversion-focused static template for product catalog and external-checkout affiliate sites.",
+  "supportedPageTypes": [
+    "page",
+    "product"
+  ],
+  "supportedBlocks": [
+    "hero",
+    "feature-grid",
+    "rich-text",
+    "cta-banner",
+    "stats",
+    "contact"
+  ],
+  "themes": [
+    "light",
+    "night"
+  ]
+}

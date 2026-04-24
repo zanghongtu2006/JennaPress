@@ -4,7 +4,7 @@ import type { BlogCategory, BlogPostSummary, SiteConfig } from '~/types'
 
 const props = defineProps<{ site: SiteConfig; categories: BlogCategory[]; category: BlogCategory | null; posts: BlogPostSummary[]; locale?: string; defaultLocale?: string }>()
 
-const p = (path) => (props.locale && props.locale !== props.defaultLocale) ? ('/' + props.locale + path) : path
+const p = (path: string) => (props.locale && props.locale !== props.defaultLocale) ? ('/' + props.locale + path) : path
 
 </script>
 
