@@ -185,3 +185,58 @@ export type SearchIndexPayload = {
   locale: string
   entries: SearchIndexEntry[]
 }
+
+export type TemplateIndexItem = {
+  name: string
+  title: string
+  slug: string
+  category: string
+  categoryLabel: string
+  categoryDescription?: string
+  tags: string[]
+  price: number
+  isFree: boolean
+  previewImage: string
+  coverImage: string
+  previewImages: string[]
+  previewUrl?: string
+  downloadUrl: string
+  description: string
+  author: string
+  authorUrl: string
+  authorAvatar?: string
+  downloadCount: number
+  rating?: number
+  reviews?: number
+  featured?: boolean
+  createdAt?: string
+  updatedAt?: string
+  url: string
+}
+
+export type TemplateIndexCategory = {
+  id: string
+  label: string
+  description?: string
+  count: number
+}
+
+export type TemplateIndexPayload = {
+  version: string
+  locale: string
+  updatedAt: string
+  count: number
+  categories: TemplateIndexCategory[]
+  items: TemplateIndexItem[]
+}
+
+export type TemplateIndexManifest = {
+  version: string
+  defaultLocale: string
+  locales: Record<string, {
+    index: string
+    hash: string
+    updatedAt: string
+    count: number
+  }>
+}

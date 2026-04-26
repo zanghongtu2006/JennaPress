@@ -7,7 +7,11 @@
     "dev": "nuxt dev",
     "build": "nuxt generate",
     "generate": "nuxt generate",
-    "preview": "nuxt preview"
+    "preview": "nuxt preview",
+    "generate:template-index": "node scripts/generate-template-index.mjs",
+    "predev": "node scripts/generate-template-index.mjs",
+    "pregenerate": "node scripts/generate-template-index.mjs",
+    "prebuild": "node scripts/generate-template-index.mjs"
   },
   "dependencies": {
     "@nuxtjs/sitemap": "^8.0.8",

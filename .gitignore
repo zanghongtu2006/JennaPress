@@ -14,3 +14,6 @@ templates/skk-corporate
 public/template-assets/skk-corporate
 lib/generated
 .data/
+# Generated template marketplace index
+public/template-index.json
+public/template-index.*.json
